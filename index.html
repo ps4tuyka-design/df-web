@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Civil & Oilfield Engineering Suite</title>
+    <title>Civil & Oilfield Engineering Suite - Professional Workstation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -44,6 +44,8 @@
             <ul class="nav-list">
                 <li class="nav-item active" data-tab="shed"><button>🏗️ <span>Steel Sheds & Trusses</span></button></li>
                 <li class="nav-item" data-tab="foundation"><button>📐 <span>Footings, FDT & Geotech</span></button></li>
+                <li class="nav-item" data-tab="rebar-opt"><button>✂️ <span>Rebar Optimizer & Wastage</span></button></li>
+                <li class="nav-item" data-tab="machinery"><button>🚜 <span>Machinery & Fleet Logistics</span></button></li>
                 <li class="nav-item" data-tab="concrete"><button>🏢 <span>Concrete & Buildings</span></button></li>
                 <li class="nav-item" data-tab="roads"><button>🛣️ <span>Roads & Earthworks</span></button></li>
                 <li class="nav-item" data-tab="survey"><button>📐 <span>Surveying Tools</span></button></li>
@@ -58,7 +60,10 @@
         <div class="header">
             <div>
                 <h1 id="currentProjectTitle">Civil & Oilfield Engineering Suite</h1>
-                <p>Integrated Structural, BOQ, Method Statement & HSE Engine</p>
+                <p>Integrated Structural, BOQ, Method Statement, Geotech & Fleet Engine</p>
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="exportToExcel()" style="margin-left:auto;">📊 Export Full BOQ to Excel (.CSV)</button>
             </div>
         </div>
 
@@ -129,7 +134,7 @@
             </div>
         </div>
 
-        <!-- NEW: Foundation & Geotech Module -->
+        <!-- 2. Foundation & Geotech Module -->
         <div id="tab-foundation" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Foundation Design & Geotech QC Tools</h3>
@@ -155,6 +160,14 @@
                 </div>
 
                 <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h3>Soil SPT Blow Count (N-Value) to Bearing Capacity</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Field SPT N-Value (Blows):</label><input type="number" id="sptNValue" value="16" oninput="calcSPT()"></div>
+                    </div>
+                    <p style="margin-top:10px;">Calculated Allowable Bearing Capacity: <b id="sptQallow" class="text-accent">200 kPa (2.00 kg/cm²)</b></p>
+                </div>
+
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
                     <h3>Field Density Test Verification (FDT - Sand Cone)</h3>
                     <div class="form-grid">
                         <div class="form-group"><label>Wet Density (g/cm³):</label><input type="number" id="fdtWetDensity" value="2.18" step="0.01" oninput="calcFDT()"></div>
@@ -166,7 +179,42 @@
             </div>
         </div>
 
-        <!-- 2. Concrete Module -->
+        <!-- 3. Rebar Optimizer Module -->
+        <div id="tab-rebar-opt" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Rebar Cutting Optimizer & Wastage Minimizer</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Stock Bar Standard Length (m):</label><input type="number" id="stockBarLen" value="12" oninput="optimizeRebar()"></div>
+                    <div class="form-group"><label>Required Cut Length (m):</label><input type="number" id="cutReqLen" value="3.8" step="0.1" oninput="optimizeRebar()"></div>
+                    <div class="form-group"><label>Total Pieces Required:</label><input type="number" id="cutReqQty" value="25" oninput="optimizeRebar()"></div>
+                </div>
+                <div class="results-box">
+                    <h3>Cut Optimization Results</h3>
+                    <p>Total Stock Bars Required (12m): <b id="optBarsNeeded" class="text-accent">9</b> Bars</p>
+                    <p style="margin-top:6px;">Pieces Yielded Per Bar: <b id="optPcsPerBar">3</b> Pieces</p>
+                    <p style="margin-top:6px;">Total Scrap / Wastage: <b id="optWastage">6.00 m (5.6%)</b></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Machinery & Fleet Logistics -->
+        <div id="tab-machinery" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Site Machinery & Equipment Fleet Logistics</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Total Concrete Pour Volume (m³):</label><input type="number" id="fleetConcVol" value="200" oninput="calcMachinery()"></div>
+                    <div class="form-group"><label>Max Allowed Pour Duration (Hours):</label><input type="number" id="fleetHours" value="5" oninput="calcMachinery()"></div>
+                    <div class="form-group"><label>Transit Mixer Capacity (m³):</label><input type="number" id="mixerCap" value="9" oninput="calcMachinery()"></div>
+                </div>
+                <div class="results-box">
+                    <h3>Logistics & Mixer Fleet Demand</h3>
+                    <p>Total Required Transit Mixer Trips: <b id="fleetTrips" class="text-accent">23</b> Trips</p>
+                    <p style="margin-top:6px;">Dispatch Dispatch Rate Needed: <b id="fleetRate">4.6 Trips / Hour</b></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Concrete Module -->
         <div id="tab-concrete" class="tab-module">
             <div class="calculator-card">
                 <h3>Reinforced Concrete & Foundation Sizing</h3>
@@ -198,7 +246,7 @@
             </div>
         </div>
 
-        <!-- 3. Roads Module -->
+        <!-- 6. Roads Module -->
         <div id="tab-roads" class="tab-module">
             <div class="calculator-card">
                 <h3>Road Layers & Earthworks Analysis</h3>
@@ -228,7 +276,7 @@
             </div>
         </div>
 
-        <!-- 4. Surveying Module -->
+        <!-- 7. Surveying Module -->
         <div id="tab-survey" class="tab-module">
             <div class="calculator-card">
                 <h3>Leveling & Topographic Field Calculations</h3>
@@ -250,7 +298,7 @@
             </div>
         </div>
 
-        <!-- 5. Technical Offer Draft -->
+        <!-- 8. Technical Offer Draft -->
         <div id="tab-offer" class="tab-module">
             <div class="calculator-card">
                 <h3>Technical Proposal & Method Statement Generator</h3>
@@ -270,7 +318,7 @@
             </div>
         </div>
 
-        <!-- 6. HSE Safety Module -->
+        <!-- 9. HSE Safety Module -->
         <div id="tab-hse" class="tab-module">
             <div class="calculator-card">
                 <h3>HSE Risk Assessment & Mitigation Plan</h3>
@@ -298,6 +346,7 @@
     <script src="js/exports.js"></script>
     <script src="js/modules/shed.js"></script>
     <script src="js/modules/foundation.js"></script>
+    <script src="js/modules/advanced.js"></script>
     <script src="js/modules/concrete.js"></script>
     <script src="js/modules/roads.js"></script>
     <script src="js/modules/survey.js"></script>
