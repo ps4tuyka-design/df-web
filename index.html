@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Civil & Oilfield Engineering Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- jsPDF & html2canvas for Professional PDF Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --navy-primary: #0F172A;
@@ -33,13 +30,13 @@
         .config-box input { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #334155; background: #0F172A; color: #22C55E; font-weight: bold; font-size: 15px; }
 
         .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-        .nav-item button { width: 100%; text-align: left; display: flex; align-items: center; gap: 10px; padding: 12px; color: #94A3B8; background: transparent; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+        .nav-item button { width: 100%; text-align: left; display: flex; align-items: center; gap: 10px; padding: 12px; color: #94A3B8; background: transparent; border: none; border-radius: 8px; font-weight: 600; font-size: 13.5px; cursor: pointer; transition: all 0.2s; }
         .nav-item.active button, .nav-item button:hover { background-color: var(--navy-secondary); color: #FFF; border-left: 4px solid var(--navy-accent); }
 
         /* Main Content */
         .main-content { flex: 1; padding: 32px; overflow-y: auto; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .btn { padding: 9px 16px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+        .btn { padding: 10px 18px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--navy-primary); }
         .btn-primary { background-color: var(--navy-accent); color: #FFF; }
         .btn-success { background-color: #10B981; color: #FFF; }
@@ -50,7 +47,7 @@
 
         .calculator-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 16px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary); text-transform: uppercase; letter-spacing: 0.5px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 14px; font-weight: 500; }
 
         /* Visualizer Container */
@@ -63,6 +60,17 @@
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
         th { background: var(--navy-primary); color: #FFF; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
         .badge-danger { background: #FEE2E2; color: #DC2626; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .badge-warning { background: #FEF3C7; color: #D97706; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .badge-success { background: #DCFCE7; color: #16A34A; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+
+        /* Printable Report Styles */
+        @media print {
+            body { background: #FFF; color: #000; }
+            .sidebar, .btn, .config-box { display: none !important; }
+            .main-content { padding: 0; }
+            .tab-module { display: block !important; }
+            .calculator-card { border: none; padding: 0; }
+        }
     </style>
 </head>
 <body>
@@ -78,11 +86,11 @@
                 </div>
             </div>
 
-            <!-- Live FX Rate Settings -->
+            <!-- FX Rate Settings -->
             <div class="config-box">
                 <label>EXCHANGE RATE PER $100 (IQD):</label>
                 <input type="number" id="fxRate" value="153000" oninput="recalculateAll()">
-                <div style="font-size: 10px; color: #22C55E; margin-top: 6px; font-weight: 600;">● Connected Live Market API</div>
+                <div style="font-size: 10px; color: #22C55E; margin-top: 6px; font-weight: 600;">● Active FX Currency Engine</div>
             </div>
 
             <!-- Navigation Links -->
@@ -102,25 +110,25 @@
         <div class="header">
             <div>
                 <h1 id="txtMainTitle" style="font-size: 22px; font-weight: 800; color: var(--navy-primary);">Structural Steel Sheds & Frame Analysis</h1>
-                <p id="txtMainDesc" style="color: var(--text-muted); font-size: 13px;">Complete structural member sizing, purlin layout, BOQ, and CAD/PDF export</p>
+                <p id="txtMainDesc" style="color: var(--text-muted); font-size: 13px;">Full member sizing, purlins, bracing, BOQ, and method statement generation</p>
             </div>
         </div>
 
         <!-- 1. Steel Sheds Module -->
         <div id="tab-shed" class="tab-module active">
-            <div class="calculator-card" id="pdf-shed-content">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Shed & Truss Input Parameters</h3>
+            <div class="calculator-card" id="print-area-shed">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Shed & Structural Parameters Input</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
                     <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
                     <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6" oninput="calcShed()"></div>
                     <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950" oninput="calcShed()"></div>
                     <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18" oninput="calcShed()"></div>
                 </div>
 
-                <!-- Canvas Visualizers -->
-                <div class="visualizer-container" id="pdf-drawing-area">
+                <!-- Visualizers -->
+                <div class="visualizer-container">
                     <div>
                         <h4 style="font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">2D Structural Frame Elevation</h4>
                         <canvas id="canvas2D"></canvas>
@@ -133,30 +141,36 @@
 
                 <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn btn-primary" onclick="exportDXF()">📐 Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success" onclick="generateModulePDF('shed')">📄 Export Section BOQ (PDF)</button>
-                    <button class="btn btn-outline" onclick="generateDrawingPDF()">🖼️ Export Drawings (PDF)</button>
+                    <button class="btn btn-success" onclick="printReport('Shed & Steel Structure')">📄 Print / Save Full Engineering PDF Report</button>
                 </div>
 
-                <!-- Detailed Member Breakdown BOQ -->
+                <!-- Checks and Warnings -->
+                <div style="margin-top:20px; padding:12px; background:#EFF6FF; border-left:4px solid #2563EB; border-radius:6px;">
+                    <h4 style="font-size:13px; color:#1E40AF;">Structural Check & Construction Method Statement:</h4>
+                    <p style="font-size:12px; color:#1E3A8A; margin-top:4px;" id="shedStructuralCheck">Checking frame stability...</p>
+                </div>
+
+                <!-- Detailed Member BOQ -->
                 <div class="results-box">
                     <h3 style="font-size: 15px; color: var(--navy-primary);">Detailed Structural Members & BOQ</h3>
                     <table>
                         <thead>
                             <tr>
                                 <th>Member / Component</th>
-                                <th>Section Profile</th>
-                                <th>Qty / Weight</th>
+                                <th>Recommended Profile</th>
+                                <th>Quantity / Weight</th>
                                 <th>Unit</th>
                                 <th>Cost ($ USD)</th>
                                 <th>Cost (IQD)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Main Columns & Rafters</td><td>IPE 300 / HEA 200</td><td id="mColQty">0</td><td>Ton</td><td id="mColUsd">$0</td><td id="mColIqd">0 IQD</td></tr>
+                            <tr><td>Main Columns & Rafters</td><td id="secCol">IPE 300 / HEA 220</td><td id="mColQty">0</td><td>Ton</td><td id="mColUsd">$0</td><td id="mColIqd">0 IQD</td></tr>
                             <tr><td>Roof & Wall Purlins</td><td>C200x2.0 Z-Purlins</td><td id="mPurQty">0</td><td>Ton</td><td id="mPurUsd">$0</td><td id="mPurIqd">0 IQD</td></tr>
-                            <tr><td>Wind Bracing & Rods</td><td>Ø20 Round Bar / L75x75</td><td id="mBrcQty">0</td><td>Ton</td><td id="mBrcUsd">$0</td><td id="mBrcIqd">0 IQD</td></tr>
-                            <tr><td>Roof & Wall Cladding</td><td>50mm Sandwich Panel</td><td id="mPanQty">0</td><td>m²</td><td id="mPanUsd">$0</td><td id="mPanIqd">0 IQD</td></tr>
-                            <tr style="font-weight:bold; background:#E2E8F0;"><td>Total Estimated Structural Cost</td><td>-</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
+                            <tr><td>Wind Bracing & Rods</td><td>Ø20 Round Steel Bar</td><td id="mBrcQty">0</td><td>Ton</td><td id="mBrcUsd">$0</td><td id="mBrcIqd">0 IQD</td></tr>
+                            <tr><td>Base Plates & Anchor Bolts</td><td>Plates 20mm + M24 Bolts</td><td id="mAncQty">0</td><td>Sets</td><td id="mAncUsd">$0</td><td id="mAncIqd">0 IQD</td></tr>
+                            <tr><td>Sandwich Panel Cladding</td><td>50mm Polyurethane Panel</td><td id="mPanQty">0</td><td>m²</td><td id="mPanUsd">$0</td><td id="mPanIqd">0 IQD</td></tr>
+                            <tr style="font-weight:bold; background:#E2E8F0;"><td>Total Estimated Cost</td><td>-</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -165,8 +179,8 @@
 
         <!-- 2. Concrete Module -->
         <div id="tab-concrete" class="tab-module">
-            <div class="calculator-card" id="pdf-concrete-content">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Building Sizing</h3>
+            <div class="calculator-card">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Foundation Design</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20" oninput="calcConcrete()"></div>
                     <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10" oninput="calcConcrete()"></div>
@@ -176,7 +190,7 @@
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateModulePDF('concrete')">📄 Export Concrete Report (PDF)</button>
+                    <button class="btn btn-success" onclick="printReport('Concrete & Foundations')">📄 Print / Save Concrete PDF Report</button>
                 </div>
 
                 <div class="results-box">
@@ -186,8 +200,8 @@
                             <tr><th>Item Description</th><th>Specification</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Ready-Mix Concrete C30/37</td><td>High Sulfate Resisting (SRC)</td><td id="concVol">0</td><td>m³</td><td id="concCostUsd">$0</td><td id="concCostIqd">0 IQD</td></tr>
-                            <tr><td>Main Rebar (Ø16mm - Ø20mm)</td><td>High Yield Deformed Bar</td><td id="rebarMainTon">0</td><td>Ton</td><td id="rebarMainUsd">$0</td><td id="rebarMainIqd">0 IQD</td></tr>
+                            <tr><td>Ready-Mix Concrete C30/37</td><td>Sulfate Resisting Cement (SRC)</td><td id="concVol">0</td><td>m³</td><td id="concCostUsd">$0</td><td id="concCostIqd">0 IQD</td></tr>
+                            <tr><td>Main Rebar (Ø16mm - Ø20mm)</td><td>High Yield Deformed Bar (Grade 60)</td><td id="rebarMainTon">0</td><td>Ton</td><td id="rebarMainUsd">$0</td><td id="rebarMainIqd">0 IQD</td></tr>
                             <tr><td>Stirrups & Ties (Ø10mm - Ø12mm)</td><td>Mild / Deformed Steel Bar</td><td id="rebarSecTon">0</td><td>Ton</td><td id="rebarSecUsd">$0</td><td id="rebarSecIqd">0 IQD</td></tr>
                         </tbody>
                     </table>
@@ -197,7 +211,7 @@
 
         <!-- 3. Roads Module -->
         <div id="tab-roads" class="tab-module">
-            <div class="calculator-card" id="pdf-roads-content">
+            <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Road Layers & Earthworks Analysis</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
@@ -207,7 +221,7 @@
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateModulePDF('roads')">📄 Export Earthworks Report (PDF)</button>
+                    <button class="btn btn-success" onclick="printReport('Roads & Earthworks')">📄 Print / Save Earthworks PDF Report</button>
                 </div>
 
                 <div class="results-box">
@@ -227,7 +241,7 @@
 
         <!-- 4. Surveying Module -->
         <div id="tab-survey" class="tab-module">
-            <div class="calculator-card" id="pdf-survey-content">
+            <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Leveling & Topographic Field Calculations</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Benchmark Elevation (BM) (m):</label><input type="number" id="bmVal" value="10.00" oninput="calcSurvey()"></div>
@@ -236,256 +250,4 @@
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateModulePDF('survey')">📄 Export Level Sheet (PDF)</button>
-                </div>
-
-                <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Level Sheet Results</h3>
-                    <p style="margin-bottom: 8px;">Height of Instrument (HI): <b id="hiVal" style="color: var(--navy-accent);">0.00</b> m</p>
-                    <p>Reduced Level (RL): <b id="rlVal" style="color: var(--navy-accent);">0.00</b> m</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. Technical Offer Draft -->
-        <div id="tab-offer" class="tab-module">
-            <div class="calculator-card" id="pdf-offer-content">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Technical Proposal & Method Statement Generator</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Project Title:</label><input type="text" id="projName" value="Construction of Industrial Storage Facilities" oninput="updateOffer()"></div>
-                    <div class="form-group"><label>Supervising Authority:</label><input type="text" id="clientName" value="Project Management Office" oninput="updateOffer()"></div>
-                </div>
-
-                <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateModulePDF('offer')">📄 Export Technical Proposal (PDF)</button>
-                </div>
-
-                <div class="results-box">
-                    <h4 style="font-size: 14px; color: var(--navy-primary);">Scope of Work & Method Statement:</h4>
-                    <p id="offerContent" style="white-space: pre-line; line-height: 1.6; margin-top: 10px; font-size: 13px; color: var(--navy-primary); font-family: monospace;"></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. HSE Safety Module -->
-        <div id="tab-hse" class="tab-module">
-            <div class="calculator-card" id="pdf-hse-content">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">HSE Hazard Identification & Risk Assessment (JSA)</h3>
-                
-                <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateModulePDF('hse')">📄 Export HSE Safety Plan (PDF)</button>
-                </div>
-
-                <div class="results-box">
-                    <table>
-                        <thead><tr><th>Site Activity</th><th>Potential Hazard</th><th>Risk Level</th><th>Control & Mitigation Measures</th></tr></thead>
-                        <tbody>
-                            <tr><td>Deep Excavations & Trenching</td><td>Soil Collapse / Cave-in</td><td><span class="badge-danger">HIGH</span></td><td>Implement 1:1 Safe Sloping & Shoring Systems.</td></tr>
-                            <tr><td>Crane Heavy Lifting Operations</td><td>Falling Load / Boom Failure</td><td><span class="badge-danger">HIGH</span></td><td>Inspect Wire Ropes, Verify Load Chart & Barricade Lifting Zone.</td></tr>
-                            <tr><td>Steel Erection at Heights</td><td>Personnel Fall from Structure</td><td><span class="badge-danger">HIGH</span></td><td>Mandatory 100% Double Lanyard Harness & Safety Netting.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- JavaScript Logic & PDF Engine -->
-    <script>
-        const { jsPDF } = window.jspdf;
-
-        async function fetchLiveFX() {
-            try {
-                const res = await fetch('https://open.er-api.com/v6/latest/USD');
-                const data = await res.json();
-                if(data && data.rates && data.rates.IQD) {
-                    document.getElementById('fxRate').value = Math.round(data.rates.IQD * 100);
-                    recalculateAll();
-                }
-            } catch(e) { console.log('FX API fallback used'); }
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-module').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('tab-' + tabId).classList.add('active');
-            document.getElementById('nav-' + tabId).classList.add('active');
-            recalculateAll();
-        }
-
-        function getFxFactor() {
-            const fx = parseFloat(document.getElementById('fxRate').value) || 153000;
-            return fx / 100;
-        }
-
-        function calcShed() {
-            const L = parseFloat(document.getElementById('shedL').value) || 0;
-            const W = parseFloat(document.getElementById('shedW').value) || 0;
-            const H = parseFloat(document.getElementById('shedH').value) || 0;
-            const bay = parseFloat(document.getElementById('baySpacing').value) || 6;
-            const pSteel = parseFloat(document.getElementById('steelP').value) || 0;
-            const pPanel = parseFloat(document.getElementById('panelP').value) || 0;
-            const factor = getFxFactor();
-
-            const area = L * W;
-            const totalSteelTon = (area * 36) / 1000;
-
-            // Structural Breakdown Ratios
-            const colTon = totalSteelTon * 0.50;  // 50% Columns & Rafters
-            const purTon = totalSteelTon * 0.35;  // 35% Purlins
-            const brcTon = totalSteelTon * 0.15;  // 15% Bracing
-
-            const panelM2 = (area * 1.05) + (2 * (L + W) * H);
-
-            const colUsd = colTon * pSteel;
-            const purUsd = purTon * pSteel;
-            const brcUsd = brcTon * pSteel;
-            const panUsd = panelM2 * pPanel;
-            const totalUsd = colUsd + purUsd + brcUsd + panUsd;
-
-            // UI Population
-            document.getElementById('mColQty').innerText = colTon.toFixed(2);
-            document.getElementById('mColUsd').innerText = '$' + Math.round(colUsd).toLocaleString();
-            document.getElementById('mColIqd').innerText = Math.round(colUsd * factor).toLocaleString() + ' IQD';
-
-            document.getElementById('mPurQty').innerText = purTon.toFixed(2);
-            document.getElementById('mPurUsd').innerText = '$' + Math.round(purUsd).toLocaleString();
-            document.getElementById('mPurIqd').innerText = Math.round(purUsd * factor).toLocaleString() + ' IQD';
-
-            document.getElementById('mBrcQty').innerText = brcTon.toFixed(2);
-            document.getElementById('mBrcUsd').innerText = '$' + Math.round(brcUsd).toLocaleString();
-            document.getElementById('mBrcIqd').innerText = Math.round(brcUsd * factor).toLocaleString() + ' IQD';
-
-            document.getElementById('mPanQty').innerText = Math.round(panelM2).toLocaleString();
-            document.getElementById('mPanUsd').innerText = '$' + Math.round(panUsd).toLocaleString();
-            document.getElementById('mPanIqd').innerText = Math.round(panUsd * factor).toLocaleString() + ' IQD';
-
-            document.getElementById('shedTotalUsd').innerText = '$' + Math.round(totalUsd).toLocaleString();
-            document.getElementById('shedTotalIqd').innerText = Math.round(totalUsd * factor).toLocaleString() + ' IQD';
-
-            draw2DFrame(W, H);
-            draw3DIso(L, W, H);
-        }
-
-        function draw2DFrame(W, H) {
-            const canvas = document.getElementById('canvas2D');
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 3;
-            const margin = 40;
-            const scaleX = (canvas.width - margin * 2) / (W || 1);
-            const scaleY = (canvas.height - margin * 2) / ((H + W * 0.2) || 1);
-            const scale = Math.min(scaleX, scaleY);
-
-            const x1 = margin, y1 = canvas.height - margin;
-            const x2 = margin + W * scale, y2 = canvas.height - margin;
-            const hApex = H + (W * 0.2);
-            const xApex = margin + (W / 2) * scale, yApex = canvas.height - margin - (hApex * scale);
-            const yEaves = canvas.height - margin - (H * scale);
-
-            ctx.beginPath();
-            ctx.moveTo(x1, y1); ctx.lineTo(x1, yEaves); ctx.lineTo(xApex, yApex);
-            ctx.lineTo(x2, yEaves); ctx.lineTo(x2, y2);
-            ctx.stroke();
-
-            ctx.beginPath(); ctx.strokeStyle = '#94A3B8'; ctx.lineWidth = 1;
-            ctx.moveTo(x1, yEaves); ctx.lineTo(x2, yEaves); ctx.stroke();
-        }
-
-        function draw3DIso(L, W, H) {
-            const canvas = document.getElementById('canvas3D');
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = '#38BDF8'; ctx.lineWidth = 2;
-            const cx = canvas.width / 2, cy = canvas.height / 1.3;
-            const scale = 3;
-
-            function project(x, y, z) {
-                const px = (x - y) * Math.cos(0.5) * scale;
-                const py = (x + y) * Math.sin(0.3) * scale - (z * scale);
-                return { x: cx + px, y: cy + py };
-            }
-
-            const p1 = project(0, 0, 0), p2 = project(W, 0, 0), p3 = project(W, L, 0), p4 = project(0, L, 0);
-            const p1h = project(0, 0, H), p2h = project(W, 0, H), p3h = project(W, L, H), p4h = project(0, L, H);
-            const pRoof1 = project(W/2, 0, H + W*0.2), pRoof2 = project(W/2, L, H + W*0.2);
-
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.lineTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y); ctx.closePath();
-            ctx.moveTo(p1h.x, p1h.y); ctx.lineTo(p2h.x, p2h.y); ctx.lineTo(p3h.x, p3h.y); ctx.lineTo(p4h.x, p4h.y); ctx.closePath();
-            ctx.moveTo(p1.x, p1.y); ctx.lineTo(p1h.x, p1h.y);
-            ctx.moveTo(p2.x, p2.y); ctx.lineTo(p2h.x, p2h.y);
-            ctx.moveTo(p3.x, p3.y); ctx.lineTo(p3h.x, p3h.y);
-            ctx.moveTo(p4.x, p4.y); ctx.lineTo(p4h.x, p4h.y);
-            ctx.moveTo(p1h.x, p1h.y); ctx.lineTo(pRoof1.x, pRoof1.y); ctx.lineTo(p2h.x, p2h.y);
-            ctx.moveTo(p4h.x, p4h.y); ctx.lineTo(pRoof2.x, pRoof2.y); ctx.lineTo(p3h.x, p3h.y);
-            ctx.moveTo(pRoof1.x, pRoof1.y); ctx.lineTo(pRoof2.x, pRoof2.y);
-            ctx.stroke();
-        }
-
-        function exportDXF() {
-            const W = document.getElementById('shedW').value || 15;
-            const H = document.getElementById('shedH').value || 6;
-            let dxf = `0\nSECTION\n2\nHEADER\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n`;
-            dxf += `0\nLINE\n8\nCOLUMNS\n10\n0.0\n20\n0.0\n11\n0.0\n21\n${H}\n`;
-            dxf += `0\nLINE\n8\nCOLUMNS\n10\n${W}\n20\n0.0\n11\n${W}\n21\n${H}\n`;
-            dxf += `0\nLINE\n8\nRAFTERS\n10\n0.0\n20\n${H}\n11\n${W/2}\n21\n${parseFloat(H) + W*0.2}\n`;
-            dxf += `0\nLINE\n8\nRAFTERS\n10\n${W/2}\n20\n${parseFloat(H) + W*0.2}\n11\n${W}\n21\n${H}\n`;
-            dxf += `0\nENDSEC\n0\nEOF\n`;
-
-            const blob = new Blob([dxf], { type: 'application/dxf' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `Structural_Frame_${W}m.dxf`;
-            link.click();
-        }
-
-        function calcConcrete() {
-            const L = parseFloat(document.getElementById('concL').value) || 0;
-            const W = parseFloat(document.getElementById('concW').value) || 0;
-            const T = (parseFloat(document.getElementById('concT').value) || 0) / 100;
-            const pConc = parseFloat(document.getElementById('concP').value) || 0;
-            const pRebar = parseFloat(document.getElementById('rebarP').value) || 0;
-            const factor = getFxFactor();
-
-            const vol = L * W * T;
-            const mainRebar = vol * 0.085; // 85 kg/m3 main
-            const secRebar = vol * 0.025;  // 25 kg/m3 secondary
-
-            const concUsd = vol * pConc;
-            const mainUsd = mainRebar * pRebar;
-            const secUsd = secRebar * pRebar;
-
-            document.getElementById('concVol').innerText = vol.toFixed(1);
-            document.getElementById('concCostUsd').innerText = '$' + Math.round(concUsd).toLocaleString();
-            document.getElementById('concCostIqd').innerText = Math.round(concUsd * factor).toLocaleString() + ' IQD';
-
-            document.getElementById('rebarMainTon').innerText = mainRebar.toFixed(2);
-            document.getElementById('rebarMainUsd').innerText = '$' + Math.round(mainUsd).toLocaleString();
-            document.getElementById('rebarMainIqd').innerText = Math.round(mainUsd * factor).toLocaleString() + ' IQD';
-
-            document.getElementById('rebarSecTon').innerText = secRebar.toFixed(2);
-            document.getElementById('rebarSecUsd').innerText = '$' + Math.round(secUsd).toLocaleString();
-            document.getElementById('rebarSecIqd').innerText = Math.round(secUsd * factor).toLocaleString() + ' IQD';
-        }
-
-        function calcRoads() {
-            const L = parseFloat(document.getElementById('roadL').value) || 0;
-            const W = parseFloat(document.getElementById('roadW').value) || 0;
-            const T = (parseFloat(document.getElementById('subbaseT').value) || 0) / 100;
-            const pSub = parseFloat(document.getElementById('subbaseP').value) || 0;
-            const factor = getFxFactor();
-
-            const vol = L * W * T * 1.25;
-            const subUsd = vol * pSub;
-            const trucks = Math.ceil(vol / 18);
-
-            document.getElementById('subVol').innerText = Math.round(vol).toLocaleString();
-            document.getElementById('subUsd').innerText = '$' + Math.round(subUsd).toLocaleString();
-            document.getElementById('subIqd').innerText = Math.round(subUsd * factor
+                    <button class="btn btn
