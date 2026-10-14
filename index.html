@@ -43,6 +43,7 @@
             <!-- Navigation Links -->
             <ul class="nav-list">
                 <li class="nav-item active" data-tab="shed"><button>🏗️ <span>Steel Sheds & Trusses</span></button></li>
+                <li class="nav-item" data-tab="foundation"><button>📐 <span>Footings, FDT & Geotech</span></button></li>
                 <li class="nav-item" data-tab="concrete"><button>🏢 <span>Concrete & Buildings</span></button></li>
                 <li class="nav-item" data-tab="roads"><button>🛣️ <span>Roads & Earthworks</span></button></li>
                 <li class="nav-item" data-tab="survey"><button>📐 <span>Surveying Tools</span></button></li>
@@ -124,6 +125,43 @@
                             <tr class="total-row"><td>Total Estimated Cost</td><td>-</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: Foundation & Geotech Module -->
+        <div id="tab-foundation" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Foundation Design & Geotech QC Tools</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Soil Bearing Capacity q_allow (kPa):</label><input type="number" id="ftgQallow" value="120" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Axial Column Load (kN):</label><input type="number" id="ftgLoad" value="250" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="ftgConcP" value="85" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="ftgRebarP" value="900" oninput="calcFoundation()"></div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Isolated Footings & Geotech')">📄 Print / Export Foundation Report</button>
+                </div>
+
+                <div class="results-box">
+                    <h3>Isolated Footing Sizing & Quantity Output</h3>
+                    <p>Recommended Dimensions: <b id="ftgDim" class="text-accent">1.6m x 1.6m x 0.50m</b></p>
+                    <p style="margin-top:6px;">Concrete Volume per Footing: <b id="ftgConcVol">1.28</b> m³</p>
+                    <p style="margin-top:6px;">Required Excavation Volume: <b id="ftgExcVol">7.2</b> m³</p>
+                    <p style="margin-top:6px;">Rebar Weight per Footing: <b id="ftgRebarTon">0.10</b> Ton</p>
+                    <p style="margin-top:6px;">Cost / Footing (USD): <b id="ftgTotalUsd">$198</b></p>
+                    <p style="margin-top:6px;">Cost / Footing (IQD): <b id="ftgTotalIqd">300,000 IQD</b></p>
+                </div>
+
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h3>Field Density Test Verification (FDT - Sand Cone)</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Wet Density (g/cm³):</label><input type="number" id="fdtWetDensity" value="2.18" step="0.01" oninput="calcFDT()"></div>
+                        <div class="form-group"><label>Moisture Content (%):</label><input type="number" id="fdtMoisture" value="6.5" step="0.1" oninput="calcFDT()"></div>
+                        <div class="form-group"><label>Proctor Max Dry Density - MDD (g/cm³):</label><input type="number" id="fdtMDD" value="2.15" step="0.01" oninput="calcFDT()"></div>
+                    </div>
+                    <div id="fdtResult" style="margin-top:12px; font-size:15px;"></div>
                 </div>
             </div>
         </div>
@@ -259,6 +297,7 @@
     <script src="js/projects.js"></script>
     <script src="js/exports.js"></script>
     <script src="js/modules/shed.js"></script>
+    <script src="js/modules/foundation.js"></script>
     <script src="js/modules/concrete.js"></script>
     <script src="js/modules/roads.js"></script>
     <script src="js/modules/survey.js"></script>
