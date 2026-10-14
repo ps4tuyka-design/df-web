@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civil & Oilfield Engineering Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --navy-primary: #0F172A;
+            --navy-secondary: #1E293B;
+            --navy-accent: #2563EB;
+            --bg-light: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-dark: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', 'Inter', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar { width: 290px; background-color: var(--navy-primary); color: #FFF; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; }
+        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+        .brand-logo { width: 44px; height: 44px; background: var(--navy-accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 22px; }
+        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+        .nav-item a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #94A3B8; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 14px; transition: all 0.2s; }
+        .nav-item.active a, .nav-item a:hover { background-color: var(--navy-secondary); color: #FFF; border-inline-start: 4px solid var(--navy-accent); }
+
+        /* Currency & Rate Controls */
+        .config-card { background: var(--navy-secondary); padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #334155; }
+        .config-card label { display: block; color: #94A3B8; font-size: 12px; margin-bottom: 6px; font-weight: 500; }
+        .config-card input { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #334155; background: #0F172A; color: #FFF; font-weight: bold; font-size: 14px; }
+
+        /* Main Workspace */
+        .main-content { flex: 1; padding: 32px; overflow-y: auto; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; transition: 0.2s; }
+        .btn-primary { background-color: var(--navy-accent); color: #FFF; }
+        .btn-primary:hover { background-color: #1D4ED8; }
+        .btn-secondary { background: #E2E8F0; color: var(--navy-primary); }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--navy-primary); }
+
+        /* Modules & Tabs Layout */
+        .module-section { display: none; }
+        .module-section.active { display: block; }
+        .panel-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 14px; background: #FAFAFA; }
+
+        /* BOQ & Output Tables */
+        .boq-table { width: 100%; border-collapse: collapse; margin-top: 16px; background: #FFF; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .boq-table th, .boq-table td { padding: 12px; text-align: start; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+        .boq-table th { background: var(--navy-primary); color: #FFF; }
+
+        /* Safety Badges & Drawing Canvas */
+        .hse-alert { padding: 12px 16px; border-radius: 8px; margin-top: 16px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .hse-warning { background-color: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+        .hse-safe { background-color: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; }
+        
+        canvas { background: #1E293B; border-radius: 8px; width: 100%; height: 260px; margin-top: 16px; }
+    </style>
+</head>
+<body>
+
+    <!-- القائمة الجانبية Navigation -->
+    <div class="sidebar">
+        <div>
+            <div class="brand">
+                <div class="brand-logo">⚙️</div>
+                <div>
+                    <div style="font-weight: 800; font-size: 17px;" id="txtBrand">المنصة الهندسية</div>
+                    <div style="font-size: 11px; color: #94A3B8;" id="txtSubTitle">مساعد مهندس المواقع النفطية</div>
+                </div>
+            </div>
+
+            <!-- حاسبة العملة والدولار المباشرة -->
+            <div class="config-card">
+                <label id="lblFx">سعر الصرف ($100 بالدينار IQD):</label>
+                <input type="number" id="fxRate" value="150000" oninput="runActiveModuleCalculations()">
+            </div>
+
+            <ul class="nav-list">
+                <li class="nav-item active" onclick="switchTab('shedsTab', this)"><a href="#">🏗️ <span id="mSheds">السقايف والجملونات</span></a></li>
+                <li class="nav-item" onclick="switchTab('buildingsTab', this)"><a href="#">🏢 <span id="mBuildings">المباني والخرسانات</span></a></li>
+                <li class="nav-item" onclick="switchTab('roadsTab', this)"><a href="#">🛣️ <span id="mRoads">الطرق والتربيات</span></a></li>
+                <li class="nav-item" onclick="switchTab('surveyingTab', this)"><a href="#">📐 <span id="mSurvey">الأعمال المساحية</span></a></li>
+                <li class="nav-item" onclick="switchTab('proposalsTab', this)"><a href="#">📑 <span id="mProposal">العرض الفني</span></a></li>
+                <li class="nav-item" onclick="switchTab('hseTab', this)"><a href="#">🛡️ <span id="mHse">السلامة وتدقيق المخاطر</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي Main Workspace -->
+    <div class="main-content">
+        <div class="top-header">
+            <div>
+                <h1 id="txtMainHeading" style="font-size: 22px; font-weight: 800; color: var(--navy-primary);">الحسابات الهندسية ومستندات الموقع</h1>
+                <p id="txtMainSub" style="color: var(--text-muted); font-size: 13px;">نظام أوتوماتيكي متكامل لحساب الكميات والإنشاءات والتقارير</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" onclick="toggleLanguage()" id="btnLang">English 🌐</button>
+                <button class="btn btn-primary" onclick="exportPDF()" id="btnPdf">📄 استخراج تقرير PDF</button>
+            </div>
+        </div>
+
+        <!-- 1. قسم السقايف والجملونات -->
+        <div id="shedsTab" class="module-section active">
+            <div class="panel-card">
+                <h3 id="hShedInputs">تصميم السقايف والهياكل الحديدية (Steel Sheds & Trusses)</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label id="lblShedL">طول السقيفة (متر):</label>
+                        <input type="number" id="shedL" value="30" oninput="calculateShed()">
+                    </div>
+                    <div class="form-group">
+                        <label id="lblShedW">عرض السقيفة (متر):</label>
+                        <input type="number" id="shedW" value="15" oninput="calculateShed()">
+                    </div>
+                    <div class="form-group">
+                        <label id="lblShedH">الارتفاع (متر):</label>
+                        <input type="number" id="shedH" value="6" oninput="calculateShed()">
+                    </div>
+                    <div class="form-group">
+                        <label id="lblShedSteelPrice">سعر طن الحديد ($):</label>
+                        <input type="number" id="shedSteelPrice" value="950" oninput="calculateShed()">
+                    </div>
+                    <div class="form-group">
+                        <label id="lblShedPanelPrice">سعر م² السندويش بنل ($):</label>
+                        <input type="number" id="shedPanelPrice" value="18" oninput="calculateShed()">
+                    </div>
+                </div>
+
+                <!-- الرسم الهندسي التفاعلي Canvas -->
+                <canvas id="shedCanvas"></canvas>
+
+                <!-- تنبيهات السلامة الهندسية -->
+                <div id="shedHseAlert" class="hse-alert hse-safe">
+                    <span>🛡️ حالة التصميم: أبعاد المسافات والارتفاع ضمن حدود السلامة الهندسية.</span>
+                </div>
+
+                <!-- جدول BOQ للسقايف -->
+                <table class="boq-table">
+                    <thead>
+                        <tr>
+                            <th id="thItem1">البند / المادة</th>
+                            <th id="thQty1">الكمية</th>
+                            <th id="thUnit1
