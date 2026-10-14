@@ -37,7 +37,6 @@
         .main-content { flex: 1; padding: 32px; overflow-y: auto; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .btn { padding: 10px 18px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
-        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--navy-primary); }
         .btn-primary { background-color: var(--navy-accent); color: #FFF; }
         .btn-success { background-color: #10B981; color: #FFF; }
 
@@ -61,7 +60,6 @@
         th { background: var(--navy-primary); color: #FFF; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
         .badge-danger { background: #FEE2E2; color: #DC2626; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
 
-        /* Printable PDF Styling */
         @media print {
             body { background: #FFF; color: #000; }
             .sidebar, .btn, .config-box { display: none !important; }
@@ -88,18 +86,18 @@
             <!-- FX Rate Settings -->
             <div class="config-box">
                 <label>EXCHANGE RATE PER $100 (IQD):</label>
-                <input type="number" id="fxRate" value="153000">
+                <input type="number" id="fxRate" value="153000" oninput="recalculateAll()">
                 <div style="font-size: 10px; color: #22C55E; margin-top: 6px; font-weight: 600;">● Active FX Currency Engine</div>
             </div>
 
             <!-- Navigation Links -->
             <ul class="nav-list">
-                <li class="nav-item active" id="nav-shed"><button id="btn-nav-shed">🏗️ <span>Steel Sheds & Trusses</span></button></li>
-                <li class="nav-item" id="nav-concrete"><button id="btn-nav-concrete">🏢 <span>Concrete & Buildings</span></button></li>
-                <li class="nav-item" id="nav-roads"><button id="btn-nav-roads">®️ <span>Roads & Earthworks</span></button></li>
-                <li class="nav-item" id="nav-survey"><button id="btn-nav-survey">📐 <span>Surveying Tools</span></button></li>
-                <li class="nav-item" id="nav-offer"><button id="btn-nav-offer">📑 <span>Technical Offer Draft</span></button></li>
-                <li class="nav-item" id="nav-hse"><button id="btn-nav-hse">🛡️ <span>HSE Risk Assessment</span></button></li>
+                <li class="nav-item active" id="nav-shed"><button onclick="switchTab('shed')">Steel Sheds & Trusses</button></li>
+                <li class="nav-item" id="nav-concrete"><button onclick="switchTab('concrete')">Concrete & Buildings</button></li>
+                <li class="nav-item" id="nav-roads"><button onclick="switchTab('roads')">Roads & Earthworks</button></li>
+                <li class="nav-item" id="nav-survey"><button onclick="switchTab('survey')">Surveying Tools</button></li>
+                <li class="nav-item" id="nav-offer"><button onclick="switchTab('offer')">Technical Offer Draft</button></li>
+                <li class="nav-item" id="nav-hse"><button onclick="switchTab('hse')">HSE Risk Assessment</button></li>
             </ul>
         </div>
     </div>
@@ -118,12 +116,12 @@
             <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Shed & Structural Parameters Input</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30"></div>
-                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15"></div>
-                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6"></div>
-                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6"></div>
-                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950"></div>
-                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18"></div>
+                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18" oninput="calcShed()"></div>
                 </div>
 
                 <!-- Visualizers -->
@@ -139,8 +137,8 @@
                 </div>
 
                 <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn btn-primary" id="btn-dxf">📐 Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success btn-print">📄 Print / Save PDF Technical Report</button>
+                    <button class="btn btn-primary" onclick="exportDXF()">Export AutoCAD (.DXF)</button>
+                    <button class="btn btn-success" onclick="window.print()">Print / Save PDF Technical Report</button>
                 </div>
 
                 <!-- Structural Notes -->
@@ -181,15 +179,15 @@
             <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Foundation Sizing</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20"></div>
-                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10"></div>
-                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40"></div>
-                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85"></div>
-                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750"></div>
+                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750" oninput="calcConcrete()"></div>
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success btn-print">📄 Print / Save Concrete PDF Report</button>
+                    <button class="btn btn-success" onclick="window.print()">Print / Save Concrete PDF Report</button>
                 </div>
 
                 <div class="results-box">
@@ -213,14 +211,14 @@
             <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Road Layers & Earthworks Analysis</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500"></div>
-                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8"></div>
-                    <div class="form-group"><label>Sub-base Thickness (cm):</label><input type="number" id="subbaseT" value="25"></div>
-                    <div class="form-group"><label>Sub-base Unit Price ($/m³):</label><input type="number" id="subbaseP" value="12"></div>
+                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Sub-base Thickness (cm):</label><input type="number" id="subbaseT" value="25" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Sub-base Unit Price ($/m³):</label><input type="number" id="subbaseP" value="12" oninput="calcRoads()"></div>
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success btn-print">📄 Print / Save Earthworks PDF Report</button>
+                    <button class="btn btn-success" onclick="window.print()">Print / Save Earthworks PDF Report</button>
                 </div>
 
                 <div class="results-box">
@@ -230,4 +228,244 @@
                             <tr><th>Layer / Logistic Item</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Compacted Sub-base (Class B)</td><td id="subVol">0</td><td>m³</td><td id="
+                            <tr><td>Compacted Sub-base (Class B)</td><td id="subVol">0</td><td>m³</td><td id="subUsd">$0</td><td id="subIqd">0 IQD</td></tr>
+                            <tr><td>Tipper Truck Fleet Required (18m³ capacity)</td><td id="trucksCount">0</td><td>Trips</td><td>-</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Surveying Module -->
+        <div id="tab-survey" class="tab-module">
+            <div class="calculator-card">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Leveling & Topographic Field Calculations</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Benchmark Elevation (BM) (m):</label><input type="number" id="bmVal" value="10.00" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Back Sight (BS) (m):</label><input type="number" id="bsVal" value="1.45" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Fore Sight (FS) (m):</label><input type="number" id="fsVal" value="0.85" oninput="calcSurvey()"></div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-success" onclick="window.print()">Print / Save Level Sheet PDF</button>
+                </div>
+
+                <div class="results-box">
+                    <h3 style="font-size: 15px; color: var(--navy-primary);">Level Sheet Results</h3>
+                    <p style="margin-bottom: 8px;">Height of Instrument (HI): <b id="hiVal" style="color: var(--navy-accent);">0.00</b> m</p>
+                    <p>Reduced Level (RL): <b id="rlVal" style="color: var(--navy-accent);">0.00</b> m</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Technical Offer Draft -->
+        <div id="tab-offer" class="tab-module">
+            <div class="calculator-card">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Technical Proposal & Method Statement Generator</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Project Title:</label><input type="text" id="projName" value="Construction of Industrial Storage Facilities" oninput="updateOffer()"></div>
+                    <div class="form-group"><label>Supervising Authority:</label><input type="text" id="clientName" value="Project Management Office" oninput="updateOffer()"></div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-success" onclick="window.print()">Print / Save Proposal PDF</button>
+                </div>
+
+                <div class="results-box">
+                    <h4 style="font-size: 14px; color: var(--navy-primary);">Scope of Work & Method Statement:</h4>
+                    <p id="offerContent" style="white-space: pre-line; line-height: 1.6; margin-top: 10px; font-size: 13px; color: var(--navy-primary); font-family: monospace;"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. HSE Safety Module -->
+        <div id="tab-hse" class="tab-module">
+            <div class="calculator-card">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">HSE Risk Assessment & Mitigation Plan</h3>
+                
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-success" onclick="window.print()">Print / Save HSE Plan PDF</button>
+                </div>
+
+                <div class="results-box">
+                    <table>
+                        <thead><tr><th>Site Activity</th><th>Potential Hazard</th><th>Risk Level</th><th>Control & Mitigation Measures</th></tr></thead>
+                        <tbody>
+                            <tr><td>Deep Excavations & Trenching</td><td>Soil Collapse / Cave-in</td><td><span class="badge-danger">HIGH</span></td><td>Implement 1:1 Safe Sloping & Shoring Systems.</td></tr>
+                            <tr><td>Crane Heavy Lifting Operations</td><td>Falling Load / Boom Failure</td><td><span class="badge-danger">HIGH</span></td><td>Inspect Wire Ropes, Verify Load Chart & Barricade Lifting Zone.</td></tr>
+                            <tr><td>Steel Erection at Heights</td><td>Personnel Fall from Structure</td><td><span class="badge-danger">HIGH</span></td><td>Mandatory 100% Double Lanyard Harness & Safety Netting.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Core Script Engine -->
+    <script>
+        function switchTab(tabId) {
+            var tabs = ['shed', 'concrete', 'roads', 'survey', 'offer', 'hse'];
+            for(var i = 0; i < tabs.length; i++) {
+                var m = document.getElementById('tab-' + tabs[i]);
+                var n = document.getElementById('nav-' + tabs[i]);
+                if (m) m.className = 'tab-module';
+                if (n) n.className = 'nav-item';
+            }
+            var targetM = document.getElementById('tab-' + tabId);
+            var targetN = document.getElementById('nav-' + tabId);
+            if (targetM) targetM.className = 'tab-module active';
+            if (targetN) targetN.className = 'nav-item active';
+            
+            recalculateAll();
+        }
+
+        function getFxFactor() {
+            var fxInput = document.getElementById('fxRate');
+            var fx = fxInput ? parseFloat(fxInput.value) : 153000;
+            return (fx || 153000) / 100;
+        }
+
+        function recalculateAll() {
+            calcShed();
+            calcConcrete();
+            calcRoads();
+            calcSurvey();
+            updateOffer();
+        }
+
+        function calcShed() {
+            var L = parseFloat(document.getElementById('shedL').value) || 0;
+            var W = parseFloat(document.getElementById('shedW').value) || 0;
+            var H = parseFloat(document.getElementById('shedH').value) || 0;
+            var bay = parseFloat(document.getElementById('baySpacing').value) || 6;
+            var pSteel = parseFloat(document.getElementById('steelP').value) || 0;
+            var pPanel = parseFloat(document.getElementById('panelP').value) || 0;
+            var factor = getFxFactor();
+
+            var area = L * W;
+            var totalSteelTon = (area * 36) / 1000;
+
+            var recProfile = "IPE 270 / HEA 180";
+            if (W > 18) recProfile = "IPE 360 / HEA 240";
+            else if (W > 12) recProfile = "IPE 300 / HEA 200";
+            
+            var secColEl = document.getElementById('secCol');
+            if(secColEl) secColEl.innerText = recProfile;
+
+            var colTon = totalSteelTon * 0.48;
+            var purTon = totalSteelTon * 0.32;
+            var brcTon = totalSteelTon * 0.12;
+            var ancTon = totalSteelTon * 0.08;
+
+            var panelM2 = (area * 1.05) + (2 * (L + W) * H);
+
+            var colUsd = colTon * pSteel;
+            var purUsd = purTon * pSteel;
+            var brcUsd = brcTon * pSteel;
+            var ancUsd = ancTon * pSteel * 1.3;
+            var panUsd = panelM2 * pPanel;
+            var totalUsd = colUsd + purUsd + brcUsd + ancUsd + panUsd;
+
+            document.getElementById('mColQty').innerText = colTon.toFixed(2);
+            document.getElementById('mColUsd').innerText = '$' + Math.round(colUsd).toLocaleString();
+            document.getElementById('mColIqd').innerText = Math.round(colUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('mPurQty').innerText = purTon.toFixed(2);
+            document.getElementById('mPurUsd').innerText = '$' + Math.round(purUsd).toLocaleString();
+            document.getElementById('mPurIqd').innerText = Math.round(purUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('mBrcQty').innerText = brcTon.toFixed(2);
+            document.getElementById('mBrcUsd').innerText = '$' + Math.round(brcUsd).toLocaleString();
+            document.getElementById('mBrcIqd').innerText = Math.round(brcUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('mAncQty').innerText = Math.ceil(L / (bay || 6)) * 2;
+            document.getElementById('mAncUsd').innerText = '$' + Math.round(ancUsd).toLocaleString();
+            document.getElementById('mAncIqd').innerText = Math.round(ancUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('mPanQty').innerText = Math.round(panelM2).toLocaleString();
+            document.getElementById('mPanUsd').innerText = '$' + Math.round(panUsd).toLocaleString();
+            document.getElementById('mPanIqd').innerText = Math.round(panUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('shedTotalUsd').innerText = '$' + Math.round(totalUsd).toLocaleString();
+            document.getElementById('shedTotalIqd').innerText = Math.round(totalUsd * factor).toLocaleString() + ' IQD';
+
+            var checkEl = document.getElementById('shedStructuralCheck');
+            if(checkEl) {
+                var footSize = (W * 0.12).toFixed(1);
+                checkEl.innerText = "Method Statement: Excavate footings (" + footSize + "m x " + footSize + "m x 1.2m). Cast C30 SRC concrete base. Erect " + recProfile + " columns at " + bay + "m spacing. Install C200 purlins & 50mm Sandwich Panels.";
+            }
+
+            draw2DFrame(W, H);
+            draw3DIso(L, W, H);
+        }
+
+        function draw2DFrame(W, H) {
+            var canvas = document.getElementById('canvas2D');
+            if(!canvas) return;
+            var ctx = canvas.getContext('2d');
+            var w = 300, h = 260;
+            canvas.width = w; canvas.height = h;
+            ctx.clearRect(0, 0, w, h);
+
+            ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 3;
+            var margin = 40;
+            var scaleX = (w - margin * 2) / (W || 1);
+            var scaleY = (h - margin * 2) / ((H + W * 0.2) || 1);
+            var scale = Math.min(scaleX, scaleY);
+
+            var x1 = margin, y1 = h - margin;
+            var x2 = margin + W * scale, y2 = h - margin;
+            var hApex = H + (W * 0.2);
+            var xApex = margin + (W / 2) * scale, yApex = h - margin - (hApex * scale);
+            var yEaves = h - margin - (H * scale);
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1); ctx.lineTo(x1, yEaves); ctx.lineTo(xApex, yApex);
+            ctx.lineTo(x2, yEaves); ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            ctx.beginPath(); ctx.strokeStyle = '#94A3B8'; ctx.lineWidth = 1;
+            ctx.moveTo(x1, yEaves); ctx.lineTo(x2, yEaves); ctx.stroke();
+        }
+
+        function draw3DIso(L, W, H) {
+            var canvas = document.getElementById('canvas3D');
+            if(!canvas) return;
+            var ctx = canvas.getContext('2d');
+            var w = 300, h = 260;
+            canvas.width = w; canvas.height = h;
+            ctx.clearRect(0, 0, w, h);
+
+            ctx.strokeStyle = '#38BDF8'; ctx.lineWidth = 2;
+            var cx = w / 2, cy = h / 1.3;
+            var scale = 2.8;
+
+            function project(x, y, z) {
+                var px = (x - y) * Math.cos(0.5) * scale;
+                var py = (x + y) * Math.sin(0.3) * scale - (z * scale);
+                return { x: cx + px, y: cy + py };
+            }
+
+            var p1 = project(0, 0, 0), p2 = project(W, 0, 0), p3 = project(W, L, 0), p4 = project(0, L, 0);
+            var p1h = project(0, 0, H), p2h = project(W, 0, H), p3h = project(W, L, H), p4h = project(0, L, H);
+            var pRoof1 = project(W/2, 0, H + W*0.2), pRoof2 = project(W/2, L, H + W*0.2);
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.lineTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y); ctx.closePath();
+            ctx.moveTo(p1h.x, p1h.y); ctx.lineTo(p2h.x, p2h.y); ctx.lineTo(p3h.x, p3h.y); ctx.lineTo(p4h.x, p4h.y); ctx.closePath();
+            ctx.moveTo(p1.x, p1.y); ctx.lineTo(p1h.x, p1h.y);
+            ctx.moveTo(p2.x, p2.y); ctx.lineTo(p2h.x, p2h.y);
+            ctx.moveTo(p3.x, p3.y); ctx.lineTo(p3h.x, p3h.y);
+            ctx.moveTo(p4.x, p4.y); ctx.lineTo(p4h.x, p4h.y);
+            ctx.moveTo(p1h.x, p1h.y); ctx.lineTo(pRoof1.x, pRoof1.y); ctx.lineTo(p2h.x, p2h.y);
+            ctx.moveTo(p4h.x, p4h.y); ctx.lineTo(pRoof2.x, pRoof2.y); ctx.lineTo(p3h.x, p3h.y);
+            ctx.moveTo(pRoof1.x, pRoof1.y); ctx.lineTo(pRoof2.x, pRoof2.y);
+            ctx.stroke();
+        }
+
+        function exportDXF() {
+            var W = document.getElementById('shedW').value || 15;
+            var H = document.getElementById('shedH').value || 6;
+            var dxf = "0\nSECTION\n2\nHEADER\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n";
+            dxf += "0\nLINE\n8\nCOLUMNS\n10\n0.0\n20\n0.0\n11\n0.0\n21\n" + H + "\n";
