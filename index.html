@@ -5,120 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Civil & Oilfield Engineering Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy-primary: #0F172A;
-            --navy-secondary: #1E293B;
-            --navy-accent: #2563EB;
-            --bg-light: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --text-dark: #0F172A;
-            --text-muted: #64748B;
-            --border-color: #E2E8F0;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); display: flex; min-height: 100vh; }
-
-        /* Sidebar */
-        .sidebar { width: 280px; background-color: var(--navy-primary); color: #FFF; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; }
-        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-        .brand-logo { width: 42px; height: 42px; background: var(--navy-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: #FFF; }
-        
-        .config-box { background: var(--navy-secondary); padding: 14px; border-radius: 8px; margin-bottom: 20px; font-size: 12px; }
-        .config-box label { display: block; color: #94A3B8; margin-bottom: 6px; font-weight: 600; }
-        .config-box input { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #334155; background: #0F172A; color: #22C55E; font-weight: bold; font-size: 15px; }
-
-        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-        .nav-item button { width: 100%; text-align: left; display: flex; align-items: center; gap: 10px; padding: 12px; color: #94A3B8; background: transparent; border: none; border-radius: 8px; font-weight: 600; font-size: 13.5px; cursor: pointer; transition: all 0.2s; }
-        .nav-item.active button, .nav-item button:hover { background-color: var(--navy-secondary); color: #FFF; border-left: 4px solid var(--navy-accent); }
-
-        /* Main Content */
-        .main-content { flex: 1; padding: 32px; overflow-y: auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .btn { padding: 10px 18px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
-        .btn-primary { background-color: var(--navy-accent); color: #FFF; }
-        .btn-success { background-color: #10B981; color: #FFF; }
-
-        /* Tab Modules */
-        .tab-module { display: none; }
-        .tab-module.active { display: block !important; }
-
-        .calculator-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 16px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary); text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 14px; font-weight: 500; }
-
-        /* Vector Visualizer Container */
-        .visualizer-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
-        .svg-box { width: 100%; height: 220px; background: #0F172A; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-
-        /* Tables & Results */
-        .results-box { margin-top: 24px; background: #F1F5F9; border-radius: 8px; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; background: #FFF; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
-        th { background: var(--navy-primary); color: #FFF; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
-        .badge-danger { background: #FEE2E2; color: #DC2626; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- Sidebar -->
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div>
             <div class="brand">
                 <div class="brand-logo">E</div>
                 <div>
-                    <div style="font-weight: 800; font-size: 16px; letter-spacing: 0.5px;">ENGINEERING SUITE</div>
-                    <div style="font-size: 11px; color: #94A3B8;">Civil & Oilfield Copilot</div>
+                    <div class="brand-title">ENGINEERING SUITE</div>
+                    <div class="brand-sub">Civil & Oilfield Copilot</div>
                 </div>
             </div>
 
-            <!-- Automated Live FX Settings -->
+            <!-- Project Management Panel -->
+            <div class="config-box">
+                <label>PROJECT MANAGER & SAVER:</label>
+                <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+                    <select id="projectSelect" onchange="ProjectEngine.loadSelectedProject()" style="width:70%; padding:6px; background:#0F172A; color:#FFF; border:1px solid #334155; border-radius:4px; font-size:11px;"></select>
+                    <button onclick="ProjectEngine.saveCurrentProject()" style="width:30%; background:#2563EB; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">SAVE</button>
+                </div>
+                <div style="display: flex; gap: 4px;">
+                    <input type="text" id="newProjectName" placeholder="New Project Name" style="width:70%; padding:6px; font-size:11px;">
+                    <button onclick="ProjectEngine.createNewProject()" style="width:30%; background:#10B981; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">+ NEW</button>
+                </div>
+            </div>
+
+            <!-- Live Market Exchange Rate Box -->
             <div class="config-box">
                 <label>EXCHANGE RATE PER $100 (IQD):</label>
-                <input type="number" id="fxRate" value="153000" oninput="recalculateAll()">
-                <div style="font-size: 10px; color: #22C55E; margin-top: 6px; font-weight: 600;" id="fxStatus">● Connected to Live FX Engine</div>
+                <input type="number" id="fxRate" value="153000">
+                <div class="fx-status" id="fxStatus">● Live Market FX Engine</div>
             </div>
 
             <!-- Navigation Links -->
             <ul class="nav-list">
-                <li class="nav-item active" id="nav-shed"><button onclick="openTab('shed')">Steel Sheds & Trusses</button></li>
-                <li class="nav-item" id="nav-concrete"><button onclick="openTab('concrete')">Concrete & Buildings</button></li>
-                <li class="nav-item" id="nav-roads"><button onclick="openTab('roads')">Roads & Earthworks</button></li>
-                <li class="nav-item" id="nav-survey"><button onclick="openTab('survey')">Surveying Tools</button></li>
-                <li class="nav-item" id="nav-offer"><button onclick="openTab('offer')">Technical Offer Draft</button></li>
-                <li class="nav-item" id="nav-hse"><button onclick="openTab('hse')">HSE Risk Assessment</button></li>
+                <li class="nav-item active" data-tab="shed"><button>🏗️ <span>Steel Sheds & Trusses</span></button></li>
+                <li class="nav-item" data-tab="concrete"><button>🏢 <span>Concrete & Buildings</span></button></li>
+                <li class="nav-item" data-tab="roads"><button>🛣️ <span>Roads & Earthworks</span></button></li>
+                <li class="nav-item" data-tab="survey"><button>📐 <span>Surveying Tools</span></button></li>
+                <li class="nav-item" data-tab="offer"><button>📑 <span>Technical Offer Draft</span></button></li>
+                <li class="nav-item" data-tab="hse"><button>🛡️ <span>HSE Risk Assessment</span></button></li>
             </ul>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main Workspace -->
     <div class="main-content">
         <div class="header">
             <div>
-                <h1 style="font-size: 22px; font-weight: 800; color: var(--navy-primary);">Civil & Oilfield Engineering Suite</h1>
-                <p style="color: var(--text-muted); font-size: 13px;">Integrated Structural, BOQ, Method Statement & HSE Engine</p>
+                <h1 id="currentProjectTitle">Civil & Oilfield Engineering Suite</h1>
+                <p>Integrated Structural, BOQ, Method Statement & HSE Engine</p>
             </div>
         </div>
 
         <!-- 1. Steel Sheds Module -->
         <div id="tab-shed" class="tab-module active">
             <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Shed & Structural Parameters Input</h3>
+                <h3>Shed & Structural Parameters Input</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30"></div>
+                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15"></div>
+                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6"></div>
+                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6"></div>
+                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950"></div>
+                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18"></div>
                 </div>
 
-                <!-- Vector Drawings -->
                 <div class="visualizer-container">
                     <div>
-                        <h4 style="font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">2D Structural Frame Elevation</h4>
+                        <h4>2D Structural Frame Elevation</h4>
                         <div class="svg-box">
                             <svg width="220" height="160" viewBox="0 0 200 150">
                                 <path d="M 20 130 L 20 60 L 100 20 L 180 60 L 180 130" stroke="#2563EB" stroke-width="3" fill="none"/>
@@ -128,45 +86,34 @@
                         </div>
                     </div>
                     <div>
-                        <h4 style="font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">3D Structural Wireframe</h4>
+                        <h4>3D Structural Wireframe</h4>
                         <div class="svg-box">
                             <svg width="220" height="160" viewBox="0 0 200 150">
                                 <path d="M 30 110 L 80 130 L 170 90 L 120 70 Z" stroke="#38BDF8" stroke-width="1.5" fill="none"/>
                                 <path d="M 30 60 L 80 80 L 170 40 L 120 20 Z" stroke="#38BDF8" stroke-width="1.5" fill="none"/>
-                                <path d="M 55 40 L 145 0" stroke="#38BDF8" stroke-width="1.5" fill="none"/>
                                 <line x1="30" y1="110" x2="30" y2="60" stroke="#38BDF8" stroke-width="1.5"/>
                                 <line x1="80" y1="130" x2="80" y2="80" stroke="#38BDF8" stroke-width="1.5"/>
                                 <line x1="170" y1="90" x2="170" y2="40" stroke="#38BDF8" stroke-width="1.5"/>
-                                <line x1="120" y1="70" x2="120" y2="20" stroke="#38BDF8" stroke-width="1.5"/>
                             </svg>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn btn-primary" onclick="exportDXF()">Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success" onclick="generateEngineeringPDF('Shed & Steel Structure')">📄 Print / Export Full Technical PDF Report</button>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnExportDXF">📐 Export AutoCAD (.DXF)</button>
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Shed & Steel Structure')">📄 Print / Export Technical Report</button>
                 </div>
 
-                <!-- Structural Notes -->
-                <div style="margin-top:20px; padding:12px; background:#EFF6FF; border-left:4px solid #2563EB; border-radius:6px;">
-                    <h4 style="font-size:13px; color:#1E40AF;">Structural Specifications & Construction Method Statement:</h4>
-                    <p style="font-size:12px; color:#1E3A8A; margin-top:4px;" id="shedStructuralCheck">-</p>
+                <div class="method-box">
+                    <h4>Structural Specifications & Construction Method Statement:</h4>
+                    <p id="shedStructuralCheck">-</p>
                 </div>
 
-                <!-- Detailed Member BOQ -->
                 <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Detailed Structural Members & BOQ</h3>
+                    <h3>Detailed Structural Members & BOQ</h3>
                     <table>
                         <thead>
-                            <tr>
-                                <th>Member / Component</th>
-                                <th>Recommended Profile</th>
-                                <th>Quantity / Weight</th>
-                                <th>Unit</th>
-                                <th>Cost ($ USD)</th>
-                                <th>Cost (IQD)</th>
-                            </tr>
+                            <tr><th>Member / Component</th><th>Recommended Profile</th><th>Quantity / Weight</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
                         </thead>
                         <tbody>
                             <tr><td>Main Columns & Rafters</td><td id="secCol">IPE 300 / HEA 200</td><td id="mColQty">0</td><td>Ton</td><td id="mColUsd">$0</td><td id="mColIqd">0 IQD</td></tr>
@@ -174,7 +121,7 @@
                             <tr><td>Wind Bracing & Rods</td><td>Ø20 Round Steel Bar</td><td id="mBrcQty">0</td><td>Ton</td><td id="mBrcUsd">$0</td><td id="mBrcIqd">0 IQD</td></tr>
                             <tr><td>Base Plates & Anchor Bolts</td><td>Plates 20mm + M24 Bolts</td><td id="mAncQty">0</td><td>Sets</td><td id="mAncUsd">$0</td><td id="mAncIqd">0 IQD</td></tr>
                             <tr><td>Sandwich Panel Cladding</td><td>50mm Polyurethane Panel</td><td id="mPanQty">0</td><td>m²</td><td id="mPanUsd">$0</td><td id="mPanIqd">0 IQD</td></tr>
-                            <tr style="font-weight:bold; background:#E2E8F0;"><td>Total Estimated Cost</td><td>-</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
+                            <tr class="total-row"><td>Total Estimated Cost</td><td>-</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -184,21 +131,21 @@
         <!-- 2. Concrete Module -->
         <div id="tab-concrete" class="tab-module">
             <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Foundation Sizing</h3>
+                <h3>Reinforced Concrete & Foundation Sizing</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20"></div>
+                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10"></div>
+                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40"></div>
+                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85"></div>
+                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750"></div>
                 </div>
 
-                <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateEngineeringPDF('Concrete & Building Design')">📄 Print / Export Concrete PDF Report</button>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Concrete & Foundation Design')">📄 Print / Export Concrete PDF Report</button>
                 </div>
 
                 <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Reinforcement & Material Breakdown</h3>
+                    <h3>Reinforcement & Material Breakdown</h3>
                     <table>
                         <thead>
                             <tr><th>Item Description</th><th>Specification</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
@@ -216,20 +163,20 @@
         <!-- 3. Roads Module -->
         <div id="tab-roads" class="tab-module">
             <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Road Layers & Earthworks Analysis</h3>
+                <h3>Road Layers & Earthworks Analysis</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
-                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
-                    <div class="form-group"><label>Sub-base Thickness (cm):</label><input type="number" id="subbaseT" value="25" oninput="calcRoads()"></div>
-                    <div class="form-group"><label>Sub-base Unit Price ($/m³):</label><input type="number" id="subbaseP" value="12" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500"></div>
+                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8"></div>
+                    <div class="form-group"><label>Sub-base Thickness (cm):</label><input type="number" id="subbaseT" value="25"></div>
+                    <div class="form-group"><label>Sub-base Unit Price ($/m³):</label><input type="number" id="subbaseP" value="12"></div>
                 </div>
 
-                <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateEngineeringPDF('Roads & Earthworks')">📄 Print / Export Earthworks PDF Report</button>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Roads & Earthworks')">📄 Print / Export Earthworks PDF Report</button>
                 </div>
 
                 <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Logistics & Quantities Summary</h3>
+                    <h3>Logistics & Quantities Summary</h3>
                     <table>
                         <thead>
                             <tr><th>Layer / Logistic Item</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
@@ -246,21 +193,21 @@
         <!-- 4. Surveying Module -->
         <div id="tab-survey" class="tab-module">
             <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Leveling & Topographic Field Calculations</h3>
+                <h3>Leveling & Topographic Field Calculations</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Benchmark Elevation (BM) (m):</label><input type="number" id="bmVal" value="10.00" oninput="calcSurvey()"></div>
-                    <div class="form-group"><label>Back Sight (BS) (m):</label><input type="number" id="bsVal" value="1.45" oninput="calcSurvey()"></div>
-                    <div class="form-group"><label>Fore Sight (FS) (m):</label><input type="number" id="fsVal" value="0.85" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Benchmark Elevation (BM) (m):</label><input type="number" id="bmVal" value="10.00"></div>
+                    <div class="form-group"><label>Back Sight (BS) (m):</label><input type="number" id="bsVal" value="1.45"></div>
+                    <div class="form-group"><label>Fore Sight (FS) (m):</label><input type="number" id="fsVal" value="0.85"></div>
                 </div>
 
-                <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="generateEngineeringPDF('Surveying Level Sheet')">📄 Print / Export Level Sheet PDF</button>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Surveying Level Sheet')">📄 Print / Export Level Sheet PDF</button>
                 </div>
 
                 <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Level Sheet Results</h3>
-                    <p style="margin-bottom: 8px;">Height of Instrument (HI): <b id="hiVal" style="color: var(--navy-accent);">0.00</b> m</p>
-                    <p>Reduced Level (RL): <b id="rlVal" style="color: var(--navy-accent);">0.00</b> m</p>
+                    <h3>Level Sheet Results</h3>
+                    <p>Height of Instrument (HI): <b id="hiVal" class="text-accent">0.00</b> m</p>
+                    <p style="margin-top:8px;">Reduced Level (RL): <b id="rlVal" class="text-accent">0.00</b> m</p>
                 </div>
             </div>
         </div>
@@ -268,5 +215,54 @@
         <!-- 5. Technical Offer Draft -->
         <div id="tab-offer" class="tab-module">
             <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Technical Proposal & Method Statement Generator</h3>
-                <div
+                <h3>Technical Proposal & Method Statement Generator</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Project Title:</label><input type="text" id="projName" value="Construction of Industrial Storage Facilities"></div>
+                    <div class="form-group"><label>Supervising Authority:</label><input type="text" id="clientName" value="Project Management Office"></div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Technical Proposal')">📄 Print / Export Proposal PDF</button>
+                </div>
+
+                <div class="results-box">
+                    <h4>Scope of Work & Method Statement:</h4>
+                    <p id="offerContent" class="code-preview"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. HSE Safety Module -->
+        <div id="tab-hse" class="tab-module">
+            <div class="calculator-card">
+                <h3>HSE Risk Assessment & Mitigation Plan</h3>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('HSE Safety Plan')">📄 Print / Export HSE Plan PDF</button>
+                </div>
+                <div class="results-box">
+                    <table>
+                        <thead><tr><th>Site Activity</th><th>Potential Hazard</th><th>Risk Level</th><th>Control & Mitigation Measures</th></tr></thead>
+                        <tbody>
+                            <tr><td>Deep Excavations & Trenching</td><td>Soil Collapse / Cave-in</td><td><span class="badge-danger">HIGH</span></td><td>Implement 1:1 Safe Sloping & Shoring Systems.</td></tr>
+                            <tr><td>Crane Heavy Lifting Operations</td><td>Falling Load / Boom Failure</td><td><span class="badge-danger">HIGH</span></td><td>Inspect Wire Ropes, Verify Load Chart & Barricade Lifting Zone.</td></tr>
+                            <tr><td>Steel Erection at Heights</td><td>Personnel Fall from Structure</td><td><span class="badge-danger">HIGH</span></td><td>Mandatory 100% Double Lanyard Harness & Safety Netting.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script Files Execution -->
+    <script src="js/currency.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/exports.js"></script>
+    <script src="js/modules/shed.js"></script>
+    <script src="js/modules/concrete.js"></script>
+    <script src="js/modules/roads.js"></script>
+    <script src="js/modules/survey.js"></script>
+    <script src="js/modules/offer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
