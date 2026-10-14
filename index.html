@@ -44,6 +44,7 @@
             <ul class="nav-list">
                 <li class="nav-item active" data-tab="shed"><button>🏗️ <span>Steel Sheds & Trusses</span></button></li>
                 <li class="nav-item" data-tab="foundation"><button>📐 <span>Footings, FDT & Geotech</span></button></li>
+                <li class="nav-item" data-tab="site-tools"><button>🧰 <span>Site Materials & Formwork</span></button></li>
                 <li class="nav-item" data-tab="rebar-opt"><button>✂️ <span>Rebar Optimizer & Wastage</span></button></li>
                 <li class="nav-item" data-tab="machinery"><button>🚜 <span>Machinery & Fleet Logistics</span></button></li>
                 <li class="nav-item" data-tab="concrete"><button>🏢 <span>Concrete & Buildings</span></button></li>
@@ -179,7 +180,57 @@
             </div>
         </div>
 
-        <!-- 3. Rebar Optimizer Module -->
+        <!-- NEW: 3. Site Materials & Formwork Tools Module -->
+        <div id="tab-site-tools" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Site Material Takeoff & Formwork Estimator</h3>
+                
+                <!-- Rebar Details Section -->
+                <div>
+                    <h4>1. Detailed Rebar Unit Weight Calculator</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Bar Diameter Ø (mm):</label><input type="number" id="rebarDia" value="16" oninput="calcRebarDetails()"></div>
+                        <div class="form-group"><label>Total Required Length (m):</label><input type="number" id="rebarTotalLen" value="100" oninput="calcRebarDetails()"></div>
+                        <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarPricePerTon" value="900" oninput="calcRebarDetails()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Unit Weight per Metre: <b id="rebarKgPerM" class="text-accent">1.580 kg/m</b></p>
+                        <p style="margin-top:4px;">Total Weight: <b id="rebarTotalTon">0.158 Ton (158.0 kg)</b></p>
+                        <p style="margin-top:4px;">Total Estimated Cost (USD): <b id="rebarCostUsd">$142</b></p>
+                        <p style="margin-top:4px;">Total Estimated Cost (IQD): <b id="rebarCostIqd">217,500 IQD</b></p>
+                    </div>
+                </div>
+
+                <!-- Formwork & Plywood Section -->
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h4>2. Formwork & Plywood Sheet Estimator</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Shuttering Surface Area (m²):</label><input type="number" id="formworkArea" value="120" oninput="calcFormwork()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Plywood Sheets Required (incl. 10% waste): <b id="formPlywoodSheets" class="text-accent">45 Sheets (1.22x2.44m)</b></p>
+                        <p style="margin-top:4px;">Timber Props / Vertical Posts Needed: <b id="formTimberProps">180 Props / Posts</b></p>
+                    </div>
+                </div>
+
+                <!-- Blockwork & Masonry Section -->
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h4>3. Blockwork Masonry & Mortar Estimator</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Wall Length (m):</label><input type="number" id="wallLength" value="10" oninput="calcMasonry()"></div>
+                        <div class="form-group"><label>Wall Height (m):</label><input type="number" id="wallHeight" value="3" oninput="calcMasonry()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Concrete Hollow Blocks Required (20x20x40cm): <b id="blockTotalQty" class="text-accent">394 Blocks</b></p>
+                        <p style="margin-top:4px;">Mortar Cement Required: <b id="mortarCementBags">4 Bags (50kg)</b></p>
+                        <p style="margin-top:4px;">Mortar Sand Required: <b id="mortarSandVol">0.54 m³ Sand</b></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 4. Rebar Optimizer Module -->
         <div id="tab-rebar-opt" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Rebar Cutting Optimizer & Wastage Minimizer</h3>
@@ -197,7 +248,7 @@
             </div>
         </div>
 
-        <!-- 4. Machinery & Fleet Logistics -->
+        <!-- 5. Machinery & Fleet Logistics -->
         <div id="tab-machinery" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Site Machinery & Equipment Fleet Logistics</h3>
@@ -214,7 +265,7 @@
             </div>
         </div>
 
-        <!-- 5. Concrete Module -->
+        <!-- 6. Concrete Module -->
         <div id="tab-concrete" class="tab-module">
             <div class="calculator-card">
                 <h3>Reinforced Concrete & Foundation Sizing</h3>
@@ -246,7 +297,7 @@
             </div>
         </div>
 
-        <!-- 6. Roads Module -->
+        <!-- 7. Roads Module -->
         <div id="tab-roads" class="tab-module">
             <div class="calculator-card">
                 <h3>Road Layers & Earthworks Analysis</h3>
@@ -276,7 +327,7 @@
             </div>
         </div>
 
-        <!-- 7. Surveying Module -->
+        <!-- 8. Surveying Module -->
         <div id="tab-survey" class="tab-module">
             <div class="calculator-card">
                 <h3>Leveling & Topographic Field Calculations</h3>
@@ -298,7 +349,7 @@
             </div>
         </div>
 
-        <!-- 8. Technical Offer Draft -->
+        <!-- 9. Technical Offer Draft -->
         <div id="tab-offer" class="tab-module">
             <div class="calculator-card">
                 <h3>Technical Proposal & Method Statement Generator</h3>
@@ -318,7 +369,7 @@
             </div>
         </div>
 
-        <!-- 9. HSE Safety Module -->
+        <!-- 10. HSE Safety Module -->
         <div id="tab-hse" class="tab-module">
             <div class="calculator-card">
                 <h3>HSE Risk Assessment & Mitigation Plan</h3>
@@ -347,6 +398,7 @@
     <script src="js/modules/shed.js"></script>
     <script src="js/modules/foundation.js"></script>
     <script src="js/modules/advanced.js"></script>
+    <script src="js/modules/site_tools.js"></script>
     <script src="js/modules/concrete.js"></script>
     <script src="js/modules/roads.js"></script>
     <script src="js/modules/survey.js"></script>
