@@ -21,38 +21,358 @@
         body { background-color: var(--bg-light); color: var(--text-dark); display: flex; min-height: 100vh; }
 
         /* Sidebar */
-        .sidebar { width: 280px; background-color: var(--navy-primary); color: #FFF; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
+        .sidebar { width: 280px; background-color: var(--navy-primary); color: #FFF; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; }
         .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
         .brand-logo { width: 42px; height: 42px; background: var(--navy-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: #FFF; }
-        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .nav-item a { display: flex; align-items: center; gap: 12px; padding: 12px; color: #94A3B8; text-decoration: none; border-radius: 8px; font-weight: 500; transition: all 0.2s; cursor: pointer; }
-        .nav-item.active a, .nav-item a:hover { background-color: var(--navy-secondary); color: #FFF; border-inline-start: 4px solid var(--navy-accent); }
-
-        /* Exchange Rate Box */
-        .config-box { background: var(--navy-secondary); padding: 16px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; }
+        
+        .config-box { background: var(--navy-secondary); padding: 14px; border-radius: 8px; margin-bottom: 20px; font-size: 12px; }
         .config-box label { display: block; color: #94A3B8; margin-bottom: 6px; }
         .config-box input { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #334155; background: #0F172A; color: #FFF; font-weight: bold; }
+
+        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+        .nav-item button { width: 100%; text-align: start; display: flex; align-items: center; gap: 10px; padding: 12px; color: #94A3B8; background: transparent; border: none; border-radius: 8px; font-weight: 500; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+        .nav-item.active button, .nav-item button:hover { background-color: var(--navy-secondary); color: #FFF; border-inline-start: 4px solid var(--navy-accent); }
 
         /* Main Content */
         .main-content { flex: 1; padding: 32px; overflow-y: auto; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .btn { padding: 10px 18px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-outline { background: #FFF; border: 1px solid var(--border-color); color: var(--navy-primary); }
-        .btn-outline:hover { background: #F1F5F9; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--navy-primary); }
 
-        /* Module Panels */
-        .module-panel { display: none; }
-        .module-panel.active { display: block; }
+        /* Tab Modules */
+        .tab-module { display: none; }
+        .tab-module.active { display: block; }
 
-        .calculator-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; }
+        .calculator-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
         .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary); }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 14px; }
 
-        /* Tables & BOQ */
+        /* Tables & Results */
         .results-box { margin-top: 24px; background: #F1F5F9; border-radius: 8px; padding: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 12px; background: #FFF; border-radius: 8px; overflow: hidden; }
         th, td { padding: 12px; text-align: start; border-bottom: 1px solid var(--border-color); font-size: 14px; }
         th { background: var(--navy-primary); color: #FFF; }
-        
-        .text-preview { background: #FFF; border: 1px solid var(--border-color); padding: 16px; border-radius: 8px; margin-top: 12px; white-space: pre-line; line-height:
+        .badge-danger { background: #FEE2E2; color: #DC2626; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .badge-safe { background: #DCFCE7; color: #16A34A; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div>
+            <div class="brand">
+                <div class="brand-logo">K</div>
+                <div>
+                    <div style="font-weight: 800; font-size: 16px;">KPR Co-Pilot</div>
+                    <div style="font-size: 11px; color: #94A3B8;" id="txtSubTitle">المنصة الهندسية المتكاملة</div>
+                </div>
+            </div>
+
+            <!-- Currency Settings -->
+            <div class="config-box">
+                <label id="lblFx">سعر صرف $100 بالدينار (IQD):</label>
+                <input type="number" id="fxRate" value="150000" oninput="recalculateAll()">
+            </div>
+
+            <!-- Navigation Links -->
+            <ul class="nav-list">
+                <li class="nav-item active" id="nav-shed"><button onclick="switchTab('shed')">🏗️ <span id="mShed">السقايف والجملونات</span></button></li>
+                <li class="nav-item" id="nav-concrete"><button onclick="switchTab('concrete')">🏢 <span id="mConcrete">الخرسانة والمباني</span></button></li>
+                <li class="nav-item" id="nav-roads"><button onclick="switchTab('roads')">🛣️ <span id="mRoads">الطرق والتربيات</span></button></li>
+                <li class="nav-item" id="nav-survey"><button onclick="switchTab('survey')">📐 <span id="mSurvey">الأعمال المساحية</span></button></li>
+                <li class="nav-item" id="nav-offer"><button onclick="switchTab('offer')">📑 <span id="mOffer">العرض الفني</span></button></li>
+                <li class="nav-item" id="nav-hse"><button onclick="switchTab('hse')">🛡️ <span id="mHse">السلامة والمخاطر HSE</span></button></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1 id="txtMainTitle" style="font-size: 22px; font-weight: 800;">KPR Engineering Suite</h1>
+                <p id="txtMainDesc" style="color: var(--text-muted); font-size: 13px;">اختر القسم الهندسي للبدء بالحسابات والتقارير</p>
+            </div>
+            <div>
+                <button class="btn btn-outline" onclick="toggleLanguage()" id="btnLang">English 🌐</button>
+            </div>
+        </div>
+
+        <!-- 1. Sheds Module -->
+        <div id="tab-shed" class="tab-module active">
+            <div class="calculator-card">
+                <h3 id="txtShedHeader">حاسبة السقايف والجملونات (Steel Sheds)</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label id="lblShedL">الطول (متر):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
+                    <div class="form-group"><label id="lblShedW">العرض (متر):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
+                    <div class="form-group"><label id="lblShedH">الارتفاع (متر):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label id="lblSteelP">سعر طن الحديد ($):</label><input type="number" id="steelP" value="950" oninput="calcShed()"></div>
+                    <div class="form-group"><label id="lblPanelP">سعر م² البنل ($):</label><input type="number" id="panelP" value="18" oninput="calcShed()"></div>
+                </div>
+                <div class="results-box">
+                    <h3>جدول الكميات والتكلفة (BOQ)</h3>
+                    <table>
+                        <thead><tr><th>الفقرة</th><th>الكمية</th><th>الوحدة</th><th>التكلفة ($ USD)</th><th>التكلفة (IQD)</th></tr></thead>
+                        <tbody>
+                            <tr><td>هيكل المقاطع الحديدية</td><td id="shedSteelQty">0</td><td>طن</td><td id="shedSteelUsd">$0</td><td id="shedSteelIqd">0 IQD</td></tr>
+                            <tr><td>تغطية السندويش بنل</td><td id="shedPanelQty">0</td><td>م²</td><td id="shedPanelUsd">$0</td><td id="shedPanelIqd">0 IQD</td></tr>
+                            <tr style="font-weight:bold; background:#E2E8F0;"><td>المجموع الكلي</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Concrete Module -->
+        <div id="tab-concrete" class="tab-module">
+            <div class="calculator-card">
+                <h3>حاسبة الخرسانة والمباني (Concrete & Buildings)</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>طول المنشأ (متر):</label><input type="number" id="concL" value="20" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>عرض المنشأ (متر):</label><input type="number" id="concW" value="10" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>سمك الصبة/الأساس (سم):</label><input type="number" id="concT" value="40" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>سعر م³ الخرسانة ($):</label><input type="number" id="concP" value="85" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>سعر طن التسليح ($):</label><input type="number" id="rebarP" value="750" oninput="calcConcrete()"></div>
+                </div>
+                <div class="results-box">
+                    <h3>جدول كميات الخرسانة والتسليح (BOQ)</h3>
+                    <table>
+                        <thead><tr><th>المادة</th><th>الكمية</th><th>الوحدة</th><th>التكلفة ($ USD)</th><th>التكلفة (IQD)</th></tr></thead>
+                        <tbody>
+                            <tr><td>حجم الخرسانة المجهزة</td><td id="concVol">0</td><td>م³</td><td id="concCostUsd">$0</td><td id="concCostIqd">0 IQD</td></tr>
+                            <tr><td>حديد التسليح التخميني</td><td id="rebarTon">0</td><td>طن</td><td id="rebarCostUsd">$0</td><td id="rebarCostIqd">0 IQD</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Roads Module -->
+        <div id="tab-roads" class="tab-module">
+            <div class="calculator-card">
+                <h3>حاسبة الطرق والأعمال الترابية (Roads & Earthworks)</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>طول الطريق (متر):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>عرض الطريق (متر):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>سمك السبيس (سم):</label><input type="number" id="subbaseT" value="25" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>سعر م³ السبيس ($):</label><input type="number" id="subbaseP" value="12" oninput="calcRoads()"></div>
+                </div>
+                <div class="results-box">
+                    <h3>حسابات السبيس واللوجستيات</h3>
+                    <table>
+                        <thead><tr><th>البيان</th><th>القيمة</th><th>الوحدة</th><th>التكلفة ($)</th><th>التكلفة (IQD)</th></tr></thead>
+                        <tbody>
+                            <tr><td>حجم السبيس المطلوب (بعد الحدل)</td><td id="subVol">0</td><td>م³</td><td id="subUsd">$0</td><td id="subIqd">0 IQD</td></tr>
+                            <tr><td>عدد شحنات القلابات (سعة 18m³)</td><td id="trucksCount">0</td><td>سيارة/قلاب</td><td>-</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Surveying Module -->
+        <div id="tab-survey" class="tab-module">
+            <div class="calculator-card">
+                <h3>الأعمال المساحية والتسوية (Surveying & Leveling)</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>المنسوب المرجعي BM (متر):</label><input type="number" id="bmVal" value="10.00" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>قراءة الخلفة Back Sight (BS):</label><input type="number" id="bsVal" value="1.45" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>القراءة الأمامية Fore Sight (FS):</label><input type="number" id="fsVal" value="0.85" oninput="calcSurvey()"></div>
+                </div>
+                <div class="results-box">
+                    <h3>نتائج التسوية الموقعية</h3>
+                    <p>ارتفاع الجهاز (HI): <b id="hiVal">0.00</b> متر</p>
+                    <p>منسوب النقطة الجديدة (RL): <b id="rlVal">0.00</b> متر</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Technical Offer Draft -->
+        <div id="tab-offer" class="tab-module">
+            <div class="calculator-card">
+                <h3>مولّد مسودة العرض الفني (Technical Offer Draft)</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>اسم المشروع:</label><input type="text" id="projName" value="Construction of Oilfield Storage Shed"></div>
+                    <div class="form-group"><label>الشركة المشغلة:</label><input type="text" id="clientName" value="KPR / Basra Oilfields"></div>
+                </div>
+                <div class="results-box">
+                    <h4>نطاق العمل ومنهجية التنفيذ (Method Statement):</h4>
+                    <p id="offerContent" style="white-space: pre-line; line-height: 1.6; margin-top: 10px; font-size: 13px; color: var(--navy-primary);"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. HSE Safety Module -->
+        <div id="tab-hse" class="tab-module">
+            <div class="calculator-card">
+                <h3>مصفوفة السلامة وتحديث المخاطر (HSE Risk Matrix)</h3>
+                <div class="results-box">
+                    <table>
+                        <thead><tr><th>النشاط الموقعي</th><th>الخطر المحتمل</th><th>درجة الخطورة</th><th>إجراءات السلامة الوقائية</th></tr></thead>
+                        <tbody>
+                            <tr><td>أعمال الحفريات العميقة</td><td>انهيار جوانب التربة</td><td><span class="badge-danger">عالي (High)</span></td><td>عمل ميلان آمن (Sloping) واستخدام دعامات الحفر.</td></tr>
+                            <tr><td>الرفع بالكرينات الهيدروليكية</td><td>سقوط الأحمال الثقيلة</td><td><span class="badge-danger">عالي (High)</span></td><td>فحص الكيبلات وتحديد منطقة منع المرور (Barricade).</td></tr>
+                            <tr><td>العمل على الارتفاعات</td><td>سقوط العمال من الهيكل</td><td><span class="badge-danger">عالي (High)</span></td><td>ارتداء حزام الأمان الكامل (Full Body Harness).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentLang = 'ar';
+        let currentTab = 'shed';
+
+        const dict = {
+            ar: {
+                subTitle: "المنصة الهندسية المتكاملة",
+                fx: "سعر صرف $100 بالدينار (IQD):",
+                mShed: "السقايف والجملونات", mConcrete: "الخرسانة والمباني", mRoads: "الطرق والتربيات", mSurvey: "الأعمال المساحية", mOffer: "العرض الفني", mHse: "السلامة HSE",
+                langBtn: "English 🌐"
+            },
+            en: {
+                subTitle: "Integrated Engineering Suite",
+                fx: "Exchange Rate per $100 (IQD):",
+                mShed: "Steel Sheds", mConcrete: "Concrete & Buildings", mRoads: "Roads & Earthworks", mSurvey: "Surveying", mOffer: "Technical Offer", mHse: "HSE Safety",
+                langBtn: "عربي 🌐"
+            }
+        };
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-module').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('active');
+            recalculateAll();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.getElementById('htmlTag').dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('htmlTag').lang = currentLang;
+
+            const t = dict[currentLang];
+            document.getElementById('txtSubTitle').innerText = t.subTitle;
+            document.getElementById('lblFx').innerText = t.fx;
+            document.getElementById('mShed').innerText = t.mShed;
+            document.getElementById('mConcrete').innerText = t.mConcrete;
+            document.getElementById('mRoads').innerText = t.mRoads;
+            document.getElementById('mSurvey').innerText = t.mSurvey;
+            document.getElementById('mOffer').innerText = t.mOffer;
+            document.getElementById('mHse').innerText = t.mHse;
+            document.getElementById('btnLang').innerText = t.langBtn;
+
+            recalculateAll();
+        }
+
+        function getFxFactor() {
+            const fx = parseFloat(document.getElementById('fxRate').value) || 150000;
+            return fx / 100;
+        }
+
+        function calcShed() {
+            const L = parseFloat(document.getElementById('shedL').value) || 0;
+            const W = parseFloat(document.getElementById('shedW').value) || 0;
+            const H = parseFloat(document.getElementById('shedH').value) || 0;
+            const pSteel = parseFloat(document.getElementById('steelP').value) || 0;
+            const pPanel = parseFloat(document.getElementById('panelP').value) || 0;
+            const factor = getFxFactor();
+
+            const area = L * W;
+            const steelTon = (area * 35) / 1000;
+            const panelM2 = (area * 1.05) + (2 * (L + W) * H);
+
+            const steelUsd = steelTon * pSteel;
+            const panelUsd = panelM2 * pPanel;
+            const totalUsd = steelUsd + panelUsd;
+
+            document.getElementById('shedSteelQty').innerText = steelTon.toFixed(2);
+            document.getElementById('shedSteelUsd').innerText = '$' + Math.round(steelUsd).toLocaleString();
+            document.getElementById('shedSteelIqd').innerText = Math.round(steelUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('shedPanelQty').innerText = Math.round(panelM2).toLocaleString();
+            document.getElementById('shedPanelUsd').innerText = '$' + Math.round(panelUsd).toLocaleString();
+            document.getElementById('shedPanelIqd').innerText = Math.round(panelUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('shedTotalUsd').innerText = '$' + Math.round(totalUsd).toLocaleString();
+            document.getElementById('shedTotalIqd').innerText = Math.round(totalUsd * factor).toLocaleString() + ' IQD';
+        }
+
+        function calcConcrete() {
+            const L = parseFloat(document.getElementById('concL').value) || 0;
+            const W = parseFloat(document.getElementById('concW').value) || 0;
+            const T = (parseFloat(document.getElementById('concT').value) || 0) / 100;
+            const pConc = parseFloat(document.getElementById('concP').value) || 0;
+            const pRebar = parseFloat(document.getElementById('rebarP').value) || 0;
+            const factor = getFxFactor();
+
+            const vol = L * W * T;
+            const rebarTon = vol * 0.11; // 110 kg/m3
+
+            const concUsd = vol * pConc;
+            const rebarUsd = rebarTon * pRebar;
+
+            document.getElementById('concVol').innerText = vol.toFixed(1);
+            document.getElementById('concCostUsd').innerText = '$' + Math.round(concUsd).toLocaleString();
+            document.getElementById('concCostIqd').innerText = Math.round(concUsd * factor).toLocaleString() + ' IQD';
+
+            document.getElementById('rebarTon').innerText = rebarTon.toFixed(2);
+            document.getElementById('rebarCostUsd').innerText = '$' + Math.round(rebarUsd).toLocaleString();
+            document.getElementById('rebarCostIqd').innerText = Math.round(rebarUsd * factor).toLocaleString() + ' IQD';
+        }
+
+        function calcRoads() {
+            const L = parseFloat(document.getElementById('roadL').value) || 0;
+            const W = parseFloat(document.getElementById('roadW').value) || 0;
+            const T = (parseFloat(document.getElementById('subbaseT').value) || 0) / 100;
+            const pSub = parseFloat(document.getElementById('subbaseP').value) || 0;
+            const factor = getFxFactor();
+
+            const vol = L * W * T * 1.25; // 25% compaction factor
+            const subUsd = vol * pSub;
+            const trucks = Math.ceil(vol / 18);
+
+            document.getElementById('subVol').innerText = Math.round(vol).toLocaleString();
+            document.getElementById('subUsd').innerText = '$' + Math.round(subUsd).toLocaleString();
+            document.getElementById('subIqd').innerText = Math.round(subUsd * factor).toLocaleString() + ' IQD';
+            document.getElementById('trucksCount').innerText = trucks;
+        }
+
+        function calcSurvey() {
+            const bm = parseFloat(document.getElementById('bmVal').value) || 0;
+            const bs = parseFloat(document.getElementById('bsVal').value) || 0;
+            const fs = parseFloat(document.getElementById('fsVal').value) || 0;
+
+            const hi = bm + bs;
+            const rl = hi - fs;
+
+            document.getElementById('hiVal').innerText = hi.toFixed(2);
+            document.getElementById('rlVal').innerText = rl.toFixed(2);
+        }
+
+        function updateOffer() {
+            const proj = document.getElementById('projName').value;
+            const client = document.getElementById('clientName').value;
+            document.getElementById('offerContent').innerText = 
+                `1. PROJECT OVERVIEW:\n- Project Name: ${proj}\n- Client / Operator: ${client}\n\n2. METHOD STATEMENT:\n- Site Preparation & Surveying Works using calibrated Total Station.\n- Excavation & Soil Compaction up to 95% Modified Proctor Density.\n- Concrete Foundation Pouring & Structural Steel Erection.\n- Final Inspection & HSE Compliance Handover.`;
+        }
+
+        function recalculateAll() {
+            calcShed();
+            calcConcrete();
+            calcRoads();
+            calcSurvey();
+            updateOffer();
+        }
+
+        // Initialize on Load
+        recalculateAll();
+    </script>
+</body>
+</html>
