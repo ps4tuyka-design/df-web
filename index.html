@@ -88,18 +88,18 @@
             <!-- FX Rate Settings -->
             <div class="config-box">
                 <label>EXCHANGE RATE PER $100 (IQD):</label>
-                <input type="number" id="fxRate" value="153000" oninput="recalculateAll()">
+                <input type="number" id="fxRate" value="153000">
                 <div style="font-size: 10px; color: #22C55E; margin-top: 6px; font-weight: 600;">● Active FX Currency Engine</div>
             </div>
 
             <!-- Navigation Links -->
             <ul class="nav-list">
-                <li class="nav-item active" id="nav-shed"><button onclick="switchTab('shed')">🏗️ <span>Steel Sheds & Trusses</span></button></li>
-                <li class="nav-item" id="nav-concrete"><button onclick="switchTab('concrete')">🏢 <span>Concrete & Buildings</span></button></li>
-                <li class="nav-item" id="nav-roads"><button onclick="switchTab('roads')">🛣️ <span>Roads & Earthworks</span></button></li>
-                <li class="nav-item" id="nav-survey"><button onclick="switchTab('survey')">📐 <span>Surveying Tools</span></button></li>
-                <li class="nav-item" id="nav-offer"><button onclick="switchTab('offer')">📑 <span>Technical Offer Draft</span></button></li>
-                <li class="nav-item" id="nav-hse"><button onclick="switchTab('hse')">🛡️ <span>HSE Risk Assessment</span></button></li>
+                <li class="nav-item active" id="nav-shed"><button id="btn-nav-shed">🏗️ <span>Steel Sheds & Trusses</span></button></li>
+                <li class="nav-item" id="nav-concrete"><button id="btn-nav-concrete">🏢 <span>Concrete & Buildings</span></button></li>
+                <li class="nav-item" id="nav-roads"><button id="btn-nav-roads">🛣️ <span>Roads & Earthworks</span></button></li>
+                <li class="nav-item" id="nav-survey"><button id="btn-nav-survey">📐 <span>Surveying Tools</span></button></li>
+                <li class="nav-item" id="nav-offer"><button id="btn-nav-offer">📑 <span>Technical Offer Draft</span></button></li>
+                <li class="nav-item" id="nav-hse"><button id="btn-nav-hse">🛡️ <span>HSE Risk Assessment</span></button></li>
             </ul>
         </div>
     </div>
@@ -108,126 +108,4 @@
     <div class="main-content">
         <div class="header">
             <div>
-                <h1 style="font-size: 22px; font-weight: 800; color: var(--navy-primary);">Civil & Oilfield Engineering Suite</h1>
-                <p style="color: var(--text-muted); font-size: 13px;">Integrated Structural, BOQ, Method Statement & HSE Engine</p>
-            </div>
-        </div>
-
-        <!-- 1. Steel Sheds Module -->
-        <div id="tab-shed" class="tab-module active">
-            <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Shed & Structural Parameters Input</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950" oninput="calcShed()"></div>
-                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18" oninput="calcShed()"></div>
-                </div>
-
-                <!-- Visualizers -->
-                <div class="visualizer-container">
-                    <div>
-                        <h4 style="font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">2D Structural Frame Elevation</h4>
-                        <canvas id="canvas2D"></canvas>
-                    </div>
-                    <div>
-                        <h4 style="font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">3D Isometric Structural Model</h4>
-                        <canvas id="canvas3D"></canvas>
-                    </div>
-                </div>
-
-                <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn btn-primary" onclick="exportDXF()">📐 Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success" onclick="printReport()">📄 Print / Save PDF Technical Report</button>
-                </div>
-
-                <!-- Structural Notes -->
-                <div style="margin-top:20px; padding:12px; background:#EFF6FF; border-left:4px solid #2563EB; border-radius:6px;">
-                    <h4 style="font-size:13px; color:#1E40AF;">Structural Specifications & Construction Method Statement:</h4>
-                    <p style="font-size:12px; color:#1E3A8A; margin-top:4px;" id="shedStructuralCheck">-</p>
-                </div>
-
-                <!-- Detailed Member BOQ -->
-                <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Detailed Structural Members & BOQ</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Member / Component</th>
-                                <th>Recommended Profile</th>
-                                <th>Quantity / Weight</th>
-                                <th>Unit</th>
-                                <th>Cost ($ USD)</th>
-                                <th>Cost (IQD)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Main Columns & Rafters</td><td id="secCol">IPE 300 / HEA 200</td><td id="mColQty">0</td><td>Ton</td><td id="mColUsd">$0</td><td id="mColIqd">0 IQD</td></tr>
-                            <tr><td>Roof & Wall Purlins</td><td>C200x2.0 Z-Purlins</td><td id="mPurQty">0</td><td>Ton</td><td id="mPurUsd">$0</td><td id="mPurIqd">0 IQD</td></tr>
-                            <tr><td>Wind Bracing & Rods</td><td>Ø20 Round Steel Bar</td><td id="mBrcQty">0</td><td>Ton</td><td id="mBrcUsd">$0</td><td id="mBrcIqd">0 IQD</td></tr>
-                            <tr><td>Base Plates & Anchor Bolts</td><td>Plates 20mm + M24 Bolts</td><td id="mAncQty">0</td><td>Sets</td><td id="mAncUsd">$0</td><td id="mAncIqd">0 IQD</td></tr>
-                            <tr><td>Sandwich Panel Cladding</td><td>50mm Polyurethane Panel</td><td id="mPanQty">0</td><td>m²</td><td id="mPanUsd">$0</td><td id="mPanIqd">0 IQD</td></tr>
-                            <tr style="font-weight:bold; background:#E2E8F0;"><td>Total Estimated Cost</td><td>-</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Concrete Module -->
-        <div id="tab-concrete" class="tab-module">
-            <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Foundation Sizing</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85" oninput="calcConcrete()"></div>
-                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750" oninput="calcConcrete()"></div>
-                </div>
-
-                <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="printReport()">📄 Print / Save Concrete PDF Report</button>
-                </div>
-
-                <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Reinforcement & Material Breakdown</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Item Description</th><th>Specification</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Ready-Mix Concrete C30/37</td><td>Sulfate Resisting Cement (SRC)</td><td id="concVol">0</td><td>m³</td><td id="concCostUsd">$0</td><td id="concCostIqd">0 IQD</td></tr>
-                            <tr><td>Main Rebar (Ø16mm - Ø20mm)</td><td>High Yield Deformed Bar (Grade 60)</td><td id="rebarMainTon">0</td><td>Ton</td><td id="rebarMainUsd">$0</td><td id="rebarMainIqd">0 IQD</td></tr>
-                            <tr><td>Stirrups & Ties (Ø10mm - Ø12mm)</td><td>Mild / Deformed Steel Bar</td><td id="rebarSecTon">0</td><td>Ton</td><td id="rebarSecUsd">$0</td><td id="rebarSecIqd">0 IQD</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. Roads Module -->
-        <div id="tab-roads" class="tab-module">
-            <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Road Layers & Earthworks Analysis</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
-                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
-                    <div class="form-group"><label>Sub-base Thickness (cm):</label><input type="number" id="subbaseT" value="25" oninput="calcRoads()"></div>
-                    <div class="form-group"><label>Sub-base Unit Price ($/m³):</label><input type="number" id="subbaseP" value="12" oninput="calcRoads()"></div>
-                </div>
-
-                <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="printReport()">📄 Print / Save Earthworks PDF Report</button>
-                </div>
-
-                <div class="results-box">
-                    <h3 style="font-size: 15px; color: var(--navy-primary);">Logistics & Quantities Summary</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Layer / Logistic Item</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Compacted Sub-base (Class B)</td><td id="subVol">0</td>
+                <h1 style="font-size: 22px; font-weight
