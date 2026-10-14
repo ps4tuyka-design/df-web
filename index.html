@@ -42,7 +42,7 @@
 
         /* Tab Modules */
         .tab-module { display: none; }
-        .tab-module.active { display: block; }
+        .tab-module.active { display: block !important; }
 
         .calculator-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 16px; }
@@ -59,15 +59,6 @@
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
         th { background: var(--navy-primary); color: #FFF; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
         .badge-danger { background: #FEE2E2; color: #DC2626; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-
-        @media print {
-            body { background: #FFF; color: #000; }
-            .sidebar, .btn, .config-box { display: none !important; }
-            .main-content { padding: 0; }
-            .tab-module { display: none !important; }
-            .tab-module.active { display: block !important; }
-            .calculator-card { border: none; padding: 0; }
-        }
     </style>
 </head>
 <body>
@@ -86,18 +77,18 @@
             <!-- Automated Live FX Settings -->
             <div class="config-box">
                 <label>EXCHANGE RATE PER $100 (IQD):</label>
-                <input type="number" id="fxRate" value="153000" onkeyup="recalculateAll()" onchange="recalculateAll()">
+                <input type="number" id="fxRate" value="153000" oninput="recalculateAll()">
                 <div style="font-size: 10px; color: #22C55E; margin-top: 6px; font-weight: 600;" id="fxStatus">● Connected to Live FX Engine</div>
             </div>
 
             <!-- Navigation Links -->
             <ul class="nav-list">
-                <li class="nav-item active" id="nav-shed"><button onclick="switchTab('shed')">Steel Sheds & Trusses</button></li>
-                <li class="nav-item" id="nav-concrete"><button onclick="switchTab('concrete')">Concrete & Buildings</button></li>
-                <li class="nav-item" id="nav-roads"><button onclick="switchTab('roads')">Roads & Earthworks</button></li>
-                <li class="nav-item" id="nav-survey"><button onclick="switchTab('survey')">Surveying Tools</button></li>
-                <li class="nav-item" id="nav-offer"><button onclick="switchTab('offer')">Technical Offer Draft</button></li>
-                <li class="nav-item" id="nav-hse"><button onclick="switchTab('hse')">HSE Risk Assessment</button></li>
+                <li class="nav-item active" id="nav-shed"><button onclick="openTab('shed')">Steel Sheds & Trusses</button></li>
+                <li class="nav-item" id="nav-concrete"><button onclick="openTab('concrete')">Concrete & Buildings</button></li>
+                <li class="nav-item" id="nav-roads"><button onclick="openTab('roads')">Roads & Earthworks</button></li>
+                <li class="nav-item" id="nav-survey"><button onclick="openTab('survey')">Surveying Tools</button></li>
+                <li class="nav-item" id="nav-offer"><button onclick="openTab('offer')">Technical Offer Draft</button></li>
+                <li class="nav-item" id="nav-hse"><button onclick="openTab('hse')">HSE Risk Assessment</button></li>
             </ul>
         </div>
     </div>
@@ -116,12 +107,12 @@
             <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Shed & Structural Parameters Input</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" onkeyup="calcShed()" onchange="calcShed()"></div>
-                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" onkeyup="calcShed()" onchange="calcShed()"></div>
-                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" onkeyup="calcShed()" onchange="calcShed()"></div>
-                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6" onkeyup="calcShed()" onchange="calcShed()"></div>
-                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950" onkeyup="calcShed()" onchange="calcShed()"></div>
-                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18" onkeyup="calcShed()" onchange="calcShed()"></div>
+                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18" oninput="calcShed()"></div>
                 </div>
 
                 <!-- Vector Drawings -->
@@ -154,7 +145,7 @@
 
                 <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn btn-primary" onclick="exportDXF()">Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success" onclick="window.print()">Print / Save PDF Technical Report</button>
+                    <button class="btn btn-success" onclick="generateEngineeringPDF('Shed & Steel Structure')">📄 Print / Export Full Technical PDF Report</button>
                 </div>
 
                 <!-- Structural Notes -->
@@ -195,18 +186,87 @@
             <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Foundation Sizing</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20" onkeyup="calcConcrete()" onchange="calcConcrete()"></div>
-                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10" onkeyup="calcConcrete()" onchange="calcConcrete()"></div>
-                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40" onkeyup="calcConcrete()" onchange="calcConcrete()"></div>
-                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85" onkeyup="calcConcrete()" onchange="calcConcrete()"></div>
-                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750" onkeyup="calcConcrete()" onchange="calcConcrete()"></div>
+                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750" oninput="calcConcrete()"></div>
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="window.print()">Print / Save Concrete PDF Report</button>
+                    <button class="btn btn-success" onclick="generateEngineeringPDF('Concrete & Building Design')">📄 Print / Export Concrete PDF Report</button>
                 </div>
 
                 <div class="results-box">
                     <h3 style="font-size: 15px; color: var(--navy-primary);">Reinforcement & Material Breakdown</h3>
                     <table>
                         <thead>
+                            <tr><th>Item Description</th><th>Specification</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Ready-Mix Concrete C30/37</td><td>Sulfate Resisting Cement (SRC)</td><td id="concVol">0</td><td>m³</td><td id="concCostUsd">$0</td><td id="concCostIqd">0 IQD</td></tr>
+                            <tr><td>Main Rebar (Ø16mm - Ø20mm)</td><td>High Yield Deformed Bar (Grade 60)</td><td id="rebarMainTon">0</td><td>Ton</td><td id="rebarMainUsd">$0</td><td id="rebarMainIqd">0 IQD</td></tr>
+                            <tr><td>Stirrups & Ties (Ø10mm - Ø12mm)</td><td>Mild / Deformed Steel Bar</td><td id="rebarSecTon">0</td><td>Ton</td><td id="rebarSecUsd">$0</td><td id="rebarSecIqd">0 IQD</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Roads Module -->
+        <div id="tab-roads" class="tab-module">
+            <div class="calculator-card">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Road Layers & Earthworks Analysis</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Sub-base Thickness (cm):</label><input type="number" id="subbaseT" value="25" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Sub-base Unit Price ($/m³):</label><input type="number" id="subbaseP" value="12" oninput="calcRoads()"></div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-success" onclick="generateEngineeringPDF('Roads & Earthworks')">📄 Print / Export Earthworks PDF Report</button>
+                </div>
+
+                <div class="results-box">
+                    <h3 style="font-size: 15px; color: var(--navy-primary);">Logistics & Quantities Summary</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Layer / Logistic Item</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Compacted Sub-base (Class B)</td><td id="subVol">0</td><td>m³</td><td id="subUsd">$0</td><td id="subIqd">0 IQD</td></tr>
+                            <tr><td>Tipper Truck Fleet Required (18m³ capacity)</td><td id="trucksCount">0</td><td>Trips</td><td>-</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Surveying Module -->
+        <div id="tab-survey" class="tab-module">
+            <div class="calculator-card">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Leveling & Topographic Field Calculations</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Benchmark Elevation (BM) (m):</label><input type="number" id="bmVal" value="10.00" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Back Sight (BS) (m):</label><input type="number" id="bsVal" value="1.45" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Fore Sight (FS) (m):</label><input type="number" id="fsVal" value="0.85" oninput="calcSurvey()"></div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-success" onclick="generateEngineeringPDF('Surveying Level Sheet')">📄 Print / Export Level Sheet PDF</button>
+                </div>
+
+                <div class="results-box">
+                    <h3 style="font-size: 15px; color: var(--navy-primary);">Level Sheet Results</h3>
+                    <p style="margin-bottom: 8px;">Height of Instrument (HI): <b id="hiVal" style="color: var(--navy-accent);">0.00</b> m</p>
+                    <p>Reduced Level (RL): <b id="rlVal" style="color: var(--navy-accent);">0.00</b> m</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Technical Offer Draft -->
+        <div id="tab-offer" class="tab-module">
+            <div class="calculator-card">
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Technical Proposal & Method Statement Generator</h3>
+                <div
