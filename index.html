@@ -60,15 +60,14 @@
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
         th { background: var(--navy-primary); color: #FFF; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
         .badge-danger { background: #FEE2E2; color: #DC2626; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-        .badge-warning { background: #FEF3C7; color: #D97706; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-        .badge-success { background: #DCFCE7; color: #16A34A; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
 
-        /* Printable Report Styles */
+        /* Printable PDF Styling */
         @media print {
             body { background: #FFF; color: #000; }
             .sidebar, .btn, .config-box { display: none !important; }
             .main-content { padding: 0; }
-            .tab-module { display: block !important; }
+            .tab-module { display: none !important; }
+            .tab-module.active { display: block !important; }
             .calculator-card { border: none; padding: 0; }
         }
     </style>
@@ -109,14 +108,14 @@
     <div class="main-content">
         <div class="header">
             <div>
-                <h1 id="txtMainTitle" style="font-size: 22px; font-weight: 800; color: var(--navy-primary);">Structural Steel Sheds & Frame Analysis</h1>
-                <p id="txtMainDesc" style="color: var(--text-muted); font-size: 13px;">Full member sizing, purlins, bracing, BOQ, and method statement generation</p>
+                <h1 style="font-size: 22px; font-weight: 800; color: var(--navy-primary);">Civil & Oilfield Engineering Suite</h1>
+                <p style="color: var(--text-muted); font-size: 13px;">Integrated Structural, BOQ, Method Statement & HSE Engine</p>
             </div>
         </div>
 
         <!-- 1. Steel Sheds Module -->
         <div id="tab-shed" class="tab-module active">
-            <div class="calculator-card" id="print-area-shed">
+            <div class="calculator-card">
                 <h3 style="font-size: 16px; color: var(--navy-primary);">Shed & Structural Parameters Input</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
@@ -141,13 +140,13 @@
 
                 <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn btn-primary" onclick="exportDXF()">📐 Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success" onclick="printReport('Shed & Steel Structure')">📄 Print / Save Full Engineering PDF Report</button>
+                    <button class="btn btn-success" onclick="printReport()">📄 Print / Save PDF Technical Report</button>
                 </div>
 
-                <!-- Checks and Warnings -->
+                <!-- Structural Notes -->
                 <div style="margin-top:20px; padding:12px; background:#EFF6FF; border-left:4px solid #2563EB; border-radius:6px;">
-                    <h4 style="font-size:13px; color:#1E40AF;">Structural Check & Construction Method Statement:</h4>
-                    <p style="font-size:12px; color:#1E3A8A; margin-top:4px;" id="shedStructuralCheck">Checking frame stability...</p>
+                    <h4 style="font-size:13px; color:#1E40AF;">Structural Specifications & Construction Method Statement:</h4>
+                    <p style="font-size:12px; color:#1E3A8A; margin-top:4px;" id="shedStructuralCheck">-</p>
                 </div>
 
                 <!-- Detailed Member BOQ -->
@@ -165,7 +164,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Main Columns & Rafters</td><td id="secCol">IPE 300 / HEA 220</td><td id="mColQty">0</td><td>Ton</td><td id="mColUsd">$0</td><td id="mColIqd">0 IQD</td></tr>
+                            <tr><td>Main Columns & Rafters</td><td id="secCol">IPE 300 / HEA 200</td><td id="mColQty">0</td><td>Ton</td><td id="mColUsd">$0</td><td id="mColIqd">0 IQD</td></tr>
                             <tr><td>Roof & Wall Purlins</td><td>C200x2.0 Z-Purlins</td><td id="mPurQty">0</td><td>Ton</td><td id="mPurUsd">$0</td><td id="mPurIqd">0 IQD</td></tr>
                             <tr><td>Wind Bracing & Rods</td><td>Ø20 Round Steel Bar</td><td id="mBrcQty">0</td><td>Ton</td><td id="mBrcUsd">$0</td><td id="mBrcIqd">0 IQD</td></tr>
                             <tr><td>Base Plates & Anchor Bolts</td><td>Plates 20mm + M24 Bolts</td><td id="mAncQty">0</td><td>Sets</td><td id="mAncUsd">$0</td><td id="mAncIqd">0 IQD</td></tr>
@@ -180,7 +179,7 @@
         <!-- 2. Concrete Module -->
         <div id="tab-concrete" class="tab-module">
             <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Foundation Design</h3>
+                <h3 style="font-size: 16px; color: var(--navy-primary);">Reinforced Concrete & Foundation Sizing</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20" oninput="calcConcrete()"></div>
                     <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10" oninput="calcConcrete()"></div>
@@ -190,7 +189,7 @@
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="printReport('Concrete & Foundations')">📄 Print / Save Concrete PDF Report</button>
+                    <button class="btn btn-success" onclick="printReport()">📄 Print / Save Concrete PDF Report</button>
                 </div>
 
                 <div class="results-box">
@@ -221,7 +220,7 @@
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button class="btn btn-success" onclick="printReport('Roads & Earthworks')">📄 Print / Save Earthworks PDF Report</button>
+                    <button class="btn btn-success" onclick="printReport()">📄 Print / Save Earthworks PDF Report</button>
                 </div>
 
                 <div class="results-box">
@@ -231,23 +230,4 @@
                             <tr><th>Layer / Logistic Item</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Compacted Sub-base (Class B)</td><td id="subVol">0</td><td>m³</td><td id="subUsd">$0</td><td id="subIqd">0 IQD</td></tr>
-                            <tr><td>Tipper Truck Fleet Required (18m³ capacity)</td><td id="trucksCount">0</td><td>Trips</td><td>-</td><td>-</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. Surveying Module -->
-        <div id="tab-survey" class="tab-module">
-            <div class="calculator-card">
-                <h3 style="font-size: 16px; color: var(--navy-primary);">Leveling & Topographic Field Calculations</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Benchmark Elevation (BM) (m):</label><input type="number" id="bmVal" value="10.00" oninput="calcSurvey()"></div>
-                    <div class="form-group"><label>Back Sight (BS) (m):</label><input type="number" id="bsVal" value="1.45" oninput="calcSurvey()"></div>
-                    <div class="form-group"><label>Fore Sight (FS) (m):</label><input type="number" id="fsVal" value="0.85" oninput="calcSurvey()"></div>
-                </div>
-
-                <div style="margin-top: 16px;">
-                    <button class="btn btn
+                            <tr><td>Compacted Sub-base (Class B)</td><td id="subVol">0</td>
