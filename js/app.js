@@ -1,53 +1,48 @@
+// Application Initializer & Auto-Calculator
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize Engines
-    CurrencyEngine.init();
-    ProjectEngine.init();
+    // 1. Tab Navigation Listener
+    const navButtons = document.querySelectorAll('.nav-item button');
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const navItem = btn.parentElement;
+            const targetTab = navItem.getAttribute('data-tab');
 
-    // 2. Setup Navigation Routing
-    const navItems = document.querySelectorAll('.nav-list .nav-item');
-    const tabModules = document.querySelectorAll('.tab-module');
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.tab-module').forEach(mod => mod.style.display = 'none');
 
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const tabId = item.getAttribute('data-tab');
-
-            navItems.forEach(n => n.classList.remove('active'));
-            tabModules.forEach(m => {
-                m.classList.remove('active');
-                m.style.display = 'none';
-            });
-
-            item.classList.add('active');
-            const targetTab = document.getElementById(`tab-${tabId}`);
-            if (targetTab) {
-                targetTab.classList.add('active');
-                targetTab.style.display = 'block';
+            navItem.classList.add('active');
+            const activeModule = document.getElementById(`tab-${targetTab}`);
+            if (activeModule) {
+                activeModule.style.display = 'block';
             }
-
-            recalculateAll();
         });
     });
 
-    // 3. Attach Live Input Calculation Handlers
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', recalculateAll);
-    });
-
-    // 4. Attach CAD Export Button Listener
-    const btnDxf = document.getElementById('btnExportDXF');
-    if (btnDxf) {
-        btnDxf.addEventListener('click', () => {
-            ExportEngine.exportDXF();
-        });
-    }
-
-    recalculateAll();
-});
-
-function recalculateAll() {
+    // 2. Trigger Initial Calculations on Load
     if (typeof calcShed === 'function') calcShed();
+    if (typeof calcFoundation === 'function') calcFoundation();
+    if (typeof calcHydraulics === 'function') calcHydraulics();
+    if (typeof generateSCurve === 'function') generateSCurve();
     if (typeof calcConcrete === 'function') calcConcrete();
     if (typeof calcRoads === 'function') calcRoads();
     if (typeof calcSurvey === 'function') calcSurvey();
-    if (typeof updateOffer === 'function') updateOffer();
-}
+    if (typeof generateOffer === 'function') generateOffer();
+    if (typeof calcSPT === 'function') calcSPT();
+    if (typeof calcFDT === 'function') calcFDT();
+    if (typeof checkDeflection === 'function') checkDeflection();
+    if (typeof classifySoil === 'function') classifySoil();
+    if (typeof calcPanels === 'function') calcPanels();
+    if (typeof calcRebarDetails === 'function') calcRebarDetails();
+    if (typeof calcMixDesign === 'function') calcMixDesign();
+    if (typeof calcFormwork === 'function') calcFormwork();
+    if (typeof calcMasonry === 'function') calcMasonry();
+    if (typeof optimizeRebar === 'function') optimizeRebar();
+    if (typeof calcMachinery === 'function') calcMachinery();
+    if (typeof calcLapSplice === 'function') calcLapSplice();
+    if (typeof calcFuelCost === 'function') calcFuelCost();
+
+    // 3. Auto Canvas Render
+    if (typeof drawFootingCanvas === 'function') {
+        setTimeout(drawFootingCanvas, 200);
+    }
+});
