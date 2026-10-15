@@ -46,6 +46,7 @@
                 <li class="nav-item" data-tab="foundation"><button>📐 <span>Footings, FDT & Geotech</span></button></li>
                 <li class="nav-item" data-tab="hydraulics"><button>💧 <span>Pipelines & Hydraulics</span></button></li>
                 <li class="nav-item" data-tab="scurve"><button>📈 <span>S-Curve & Cash Flow</span></button></li>
+                <li class="nav-item" data-tab="extended"><button>🔬 <span>Deflection, USCS & Panels</span></button></li>
                 <li class="nav-item" data-tab="site-tools"><button>🧰 <span>Site Materials & Formwork</span></button></li>
                 <li class="nav-item" data-tab="rebar-opt"><button>✂️ <span>Rebar Optimizer & Wastage</span></button></li>
                 <li class="nav-item" data-tab="machinery"><button>🚜 <span>Machinery & Fleet Logistics</span></button></li>
@@ -182,7 +183,7 @@
             </div>
         </div>
 
-        <!-- NEW: Hydraulics Module -->
+        <!-- Hydraulics Module -->
         <div id="tab-hydraulics" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Pipeline Hydraulics & Pressure Drop Analysis</h3>
@@ -200,7 +201,7 @@
             </div>
         </div>
 
-        <!-- NEW: S-Curve Cashflow Module -->
+        <!-- S-Curve Cashflow Module -->
         <div id="tab-scurve" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>S-Curve Financial Forecast & Monthly Cash Flow</h3>
@@ -212,6 +213,53 @@
                     <h4>Monthly Cash Flow Breakdown Table</h4>
                     <div id="scurveOutput"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- NEW: Extended Engineering Module -->
+        <div id="tab-extended" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Advanced Engineering Calculations (USCS Soil, Deflection & Panels)</h3>
+                
+                <!-- Deflection Check -->
+                <div>
+                    <h4>1. Beam Structural Deflection Verification (L/240 Limit)</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Beam Span L (m):</label><input type="number" id="bmSpan" value="6.0" oninput="checkDeflection()"></div>
+                        <div class="form-group"><label>Uniform Load w (kN/m):</label><input type="number" id="bmLoad" value="12.0" oninput="checkDeflection()"></div>
+                        <div class="form-group"><label>Section Moment of Inertia Ix (cm⁴):</label><input type="number" id="bmInertia" value="8356" oninput="checkDeflection()"></div>
+                    </div>
+                    <div id="bmDeflOut" style="margin-top:12px; font-size:15px;"></div>
+                </div>
+
+                <!-- USCS Soil Classification -->
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h4>2. USCS Soil Classification (Unified Soil Classification System)</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Pass No.200 Sieve (%):</label><input type="number" id="soilPass200" value="25" oninput="classifySoil()"></div>
+                        <div class="form-group"><label>Liquid Limit - LL (%):</label><input type="number" id="soilLL" value="35" oninput="classifySoil()"></div>
+                        <div class="form-group"><label>Plastic Limit - PL (%):</label><input type="number" id="soilPL" value="20" oninput="classifySoil()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Soil Group Symbol: <b id="soilSymbolOut" class="text-accent">S-G (Sand/Gravel)</b></p>
+                        <p style="margin-top:4px;">Engineering Evaluation: <b id="soilDescOut">Coarse-Grained Soil - Excellent for Sub-base and Foundation Bedding</b></p>
+                    </div>
+                </div>
+
+                <!-- Sandwich Panel Estimator -->
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h4>3. Cladding Sandwich Panel & Screw Estimator</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Cladding Surface Area (m²):</label><input type="number" id="pnlArea" value="250" oninput="calcPanels()"></div>
+                        <div class="form-group"><label>Panel Effective Width (m):</label><input type="number" id="pnlWidth" value="1.0" oninput="calcPanels()"></div>
+                        <div class="form-group"><label>Panel Cut Length (m):</label><input type="number" id="pnlLength" value="6.0" oninput="calcPanels()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Required Panels (5% waste): <b id="pnlCount" class="text-accent">44 Panels (6.0m length)</b></p>
+                        <p style="margin-top:4px;">Fixing Accessories: <b id="pnlScrews">1000 TEK Screws (Self-Drilling)</b></p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -444,6 +492,7 @@
     <script src="js/modules/advanced.js"></script>
     <script src="js/modules/site_tools.js"></script>
     <script src="js/modules/hydraulics_qc.js"></script>
+    <script src="js/modules/extended_engineering.js"></script>
     <script src="js/modules/concrete.js"></script>
     <script src="js/modules/roads.js"></script>
     <script src="js/modules/survey.js"></script>
