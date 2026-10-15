@@ -1,2 +1,2 @@
 # df-web
-A professional, multi-language Civil Engineering &amp; HSE Web Suite designed for oilfield projects in Basra (KPR Co-Pilot). Features structural calculators, BOQs with USD/IQD live exchange rate, surveying tools, and automated technical proposals.
+DF Engineering Suite — High-performance Civil, Structural & Oilfield Engineering Workstation. Powered by real-time BOQ engines, custom FX conversion, interactive CAD visualizers, rebar optimization, and automated PDF reporting.
