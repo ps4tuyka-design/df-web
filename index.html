@@ -26,11 +26,11 @@
                 <label>PROJECT MANAGER & SAVER:</label>
                 <div style="display: flex; gap: 4px; margin-bottom: 8px;">
                     <select id="projectSelect" onchange="ProjectEngine.loadSelectedProject()" style="width:70%; padding:6px; background:#0F172A; color:#FFF; border:1px solid #334155; border-radius:4px; font-size:11px;"></select>
-                    <button onclick="ProjectEngine.saveCurrentProject()" style="width:30%; background:#2563EB; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">SAVE</button>
+                    <button onclick="ProjectEngine.saveCurrentProject(); showToast('Project Saved!','success');" style="width:30%; background:#2563EB; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">SAVE</button>
                 </div>
                 <div style="display: flex; gap: 4px;">
                     <input type="text" id="newProjectName" placeholder="New Project Name" style="width:70%; padding:6px; font-size:11px;">
-                    <button onclick="ProjectEngine.createNewProject()" style="width:30%; background:#10B981; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">+ NEW</button>
+                    <button onclick="ProjectEngine.createNewProject(); showToast('Project Created!','success');" style="width:30%; background:#10B981; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">+ NEW</button>
                 </div>
             </div>
 
@@ -61,6 +61,34 @@
         </div>
     </div>
 
+    <!-- Quick Unit Converter Floating Button -->
+    <button class="floating-converter-btn" onclick="document.getElementById('unitModal').style.display = document.getElementById('unitModal').style.display === 'none' ? 'block' : 'none'">⚡ Unit Converter</button>
+
+    <!-- Quick Converter Modal Window -->
+    <div id="unitModal" class="modal-pop" style="display:none;">
+        <div style="display:flex; justify-size:space-between; align-items:center; margin-bottom:12px;">
+            <h4 style="font-size:13px; font-weight:800;">Quick Field Converter</h4>
+            <button onclick="document.getElementById('unitModal').style.display='none'" style="background:none; border:none; color:#FFF; font-weight:bold; cursor:pointer;">✕</button>
+        </div>
+        <div class="form-group" style="margin-bottom:8px;">
+            <label>Value:</label>
+            <input type="number" id="unitVal" value="10" oninput="convertUnit()">
+        </div>
+        <div class="form-group">
+            <label>Conversion Type:</label>
+            <select id="unitType" onchange="convertUnit()">
+                <option value="m_ft">Meters to Feet (m → ft)</option>
+                <option value="ft_m">Feet to Meters (ft → m)</option>
+                <option value="psi_bar">PSI to Bar</option>
+                <option value="bar_psi">Bar to PSI</option>
+                <option value="kg_lb">Kg to Pounds (lbs)</option>
+            </select>
+        </div>
+        <div style="margin-top:12px; padding:8px; background:var(--bg-main); border-radius:6px; text-align:center;">
+            Result: <b id="unitOut" style="color:var(--accent-sky);">32.81 Feet (ft)</b>
+        </div>
+    </div>
+
     <!-- Main Workspace -->
     <div class="main-content">
         <div class="header">
@@ -70,7 +98,19 @@
             </div>
             <div style="display:flex; gap:8px;">
                 <button class="btn btn-theme" onclick="document.body.classList.toggle('light-theme')">☀️/🌙 Theme</button>
-                <button class="btn btn-primary" onclick="exportToExcel()">📊 Export Full BOQ to Excel (.CSV)</button>
+                <button class="btn btn-primary" onclick="exportToExcel(); showToast('Exporting BOQ to Excel...','info');">📊 Export Full BOQ to Excel (.CSV)</button>
+            </div>
+        </div>
+
+        <!-- Printable Company Header Options -->
+        <div class="company-header-box">
+            <div style="flex:1;">
+                <label style="font-size:10px; font-weight:800; color:var(--text-secondary);">COMPANY / CONTRACTOR NAME FOR REPORTS:</label>
+                <input type="text" id="companyHeaderName" value="DF Engineering & General Contracting Co." style="width:100%; padding:6px; font-size:11px; background:var(--bg-main); border:1px solid var(--border-color); color:var(--text-primary); border-radius:4px; margin-top:4px;">
+            </div>
+            <div style="flex:1;">
+                <label style="font-size:10px; font-weight:800; color:var(--text-secondary);">SITE ENGINEER / DESIGNER:</label>
+                <input type="text" id="engineerHeaderName" value="Eng. DF Site Manager" style="width:100%; padding:6px; font-size:11px; background:var(--bg-main); border:1px solid var(--border-color); color:var(--text-primary); border-radius:4px; margin-top:4px;">
             </div>
         </div>
 
@@ -130,7 +170,7 @@
 
                 <div class="btn-group">
                     <button class="btn btn-primary" id="btnExportDXF">📐 Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Shed & Steel Structure')">📄 Print / Export Technical Report</button>
+                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Shed & Steel Structure'); showToast('Generating Printable PDF...','info');">📄 Print / Export Technical Report</button>
                 </div>
 
                 <div class="method-box">
@@ -549,6 +589,7 @@
     <script src="js/modules/hydraulics_qc.js"></script>
     <script src="js/modules/extended_engineering.js"></script>
     <script src="js/modules/final_touches.js"></script>
+    <script src="js/modules/ui_enhancements.js"></script>
     <script src="js/modules/concrete.js"></script>
     <script src="js/modules/roads.js"></script>
     <script src="js/modules/survey.js"></script>
