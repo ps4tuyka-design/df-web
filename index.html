@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Civil & Oilfield Engineering Suite - Professional Workstation</title>
+    <title>Civil & Oilfield Engineering Suite - Ultimate Workstation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -44,6 +44,8 @@
             <ul class="nav-list">
                 <li class="nav-item active" data-tab="shed"><button>🏗️ <span>Steel Sheds & Trusses</span></button></li>
                 <li class="nav-item" data-tab="foundation"><button>📐 <span>Footings, FDT & Geotech</span></button></li>
+                <li class="nav-item" data-tab="hydraulics"><button>💧 <span>Pipelines & Hydraulics</span></button></li>
+                <li class="nav-item" data-tab="scurve"><button>📈 <span>S-Curve & Cash Flow</span></button></li>
                 <li class="nav-item" data-tab="site-tools"><button>🧰 <span>Site Materials & Formwork</span></button></li>
                 <li class="nav-item" data-tab="rebar-opt"><button>✂️ <span>Rebar Optimizer & Wastage</span></button></li>
                 <li class="nav-item" data-tab="machinery"><button>🚜 <span>Machinery & Fleet Logistics</span></button></li>
@@ -180,12 +182,43 @@
             </div>
         </div>
 
-        <!-- NEW: 3. Site Materials & Formwork Tools Module -->
+        <!-- NEW: Hydraulics Module -->
+        <div id="tab-hydraulics" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Pipeline Hydraulics & Pressure Drop Analysis</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Flow Rate (L/s):</label><input type="number" id="pipeFlow" value="25" oninput="calcHydraulics()"></div>
+                    <div class="form-group"><label>Pipe Internal Diameter (mm):</label><input type="number" id="pipeDia" value="150" oninput="calcHydraulics()"></div>
+                    <div class="form-group"><label>Pipeline Length (m):</label><input type="number" id="pipeLen" value="200" oninput="calcHydraulics()"></div>
+                    <div class="form-group"><label>Hazen-Williams C Factor:</label><input type="number" id="pipeC" value="130" oninput="calcHydraulics()"></div>
+                </div>
+                <div class="results-box" style="margin-top:15px;">
+                    <p>Flow Velocity: <b id="hydVelocity" class="text-accent">1.41 m/s</b></p>
+                    <p style="margin-top:6px;">Friction Head Loss: <b id="hydHeadLoss">2.45 m H₂O</b></p>
+                    <p style="margin-top:6px;">Pressure Drop: <b id="hydPressDrop">0.24 Bar</b></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: S-Curve Cashflow Module -->
+        <div id="tab-scurve" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>S-Curve Financial Forecast & Monthly Cash Flow</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Total Contract Budget ($):</label><input type="number" id="scurveBudget" value="150000" oninput="generateSCurve()"></div>
+                    <div class="form-group"><label>Project Duration (Months):</label><input type="number" id="scurveMonths" value="6" oninput="generateSCurve()"></div>
+                </div>
+                <div class="results-box" style="margin-top:15px;">
+                    <h4>Monthly Cash Flow Breakdown Table</h4>
+                    <div id="scurveOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Site Materials & Formwork Tools Module -->
         <div id="tab-site-tools" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Site Material Takeoff & Formwork Estimator</h3>
-                
-                <!-- Rebar Details Section -->
                 <div>
                     <h4>1. Detailed Rebar Unit Weight Calculator</h4>
                     <div class="form-grid">
@@ -201,9 +234,22 @@
                     </div>
                 </div>
 
-                <!-- Formwork & Plywood Section -->
                 <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>2. Formwork & Plywood Sheet Estimator</h4>
+                    <h4>2. Concrete Mix Design & Sand Moisture Correction</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Target Concrete Volume (m³):</label><input type="number" id="mixVol" value="10" oninput="calcMixDesign()"></div>
+                        <div class="form-group"><label>Sand Moisture Content (%):</label><input type="number" id="sandMoist" value="4" step="0.5" oninput="calcMixDesign()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Cement Required: <b id="mixCementBags" class="text-accent">76 Bags (3.80 Ton)</b></p>
+                        <p style="margin-top:4px;">Sand (Moisture Adjusted): <b id="mixSandKg">7,280 kg</b></p>
+                        <p style="margin-top:4px;">Coarse Aggregate (Gravel): <b id="mixGravelKg">11,500 kg</b></p>
+                        <p style="margin-top:4px;">Effective Mixing Water: <b id="mixWaterL">1,520 Litres</b></p>
+                    </div>
+                </div>
+
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h4>3. Formwork & Plywood Sheet Estimator</h4>
                     <div class="form-grid">
                         <div class="form-group"><label>Shuttering Surface Area (m²):</label><input type="number" id="formworkArea" value="120" oninput="calcFormwork()"></div>
                     </div>
@@ -213,9 +259,8 @@
                     </div>
                 </div>
 
-                <!-- Blockwork & Masonry Section -->
                 <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>3. Blockwork Masonry & Mortar Estimator</h4>
+                    <h4>4. Blockwork Masonry & Mortar Estimator</h4>
                     <div class="form-grid">
                         <div class="form-group"><label>Wall Length (m):</label><input type="number" id="wallLength" value="10" oninput="calcMasonry()"></div>
                         <div class="form-group"><label>Wall Height (m):</label><input type="number" id="wallHeight" value="3" oninput="calcMasonry()"></div>
@@ -226,7 +271,6 @@
                         <p style="margin-top:4px;">Mortar Sand Required: <b id="mortarSandVol">0.54 m³ Sand</b></p>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -399,6 +443,7 @@
     <script src="js/modules/foundation.js"></script>
     <script src="js/modules/advanced.js"></script>
     <script src="js/modules/site_tools.js"></script>
+    <script src="js/modules/hydraulics_qc.js"></script>
     <script src="js/modules/concrete.js"></script>
     <script src="js/modules/roads.js"></script>
     <script src="js/modules/survey.js"></script>
