@@ -44,6 +44,7 @@
             <ul class="nav-list">
                 <li class="nav-item active" data-tab="shed"><button>🏗️ <span>Steel Sheds & Trusses</span></button></li>
                 <li class="nav-item" data-tab="foundation"><button>📐 <span>Footings, FDT & Geotech</span></button></li>
+                <li class="nav-item" data-tab="final-tools"><button>🎨 <span>Canvas Visualizer & Splices</span></button></li>
                 <li class="nav-item" data-tab="hydraulics"><button>💧 <span>Pipelines & Hydraulics</span></button></li>
                 <li class="nav-item" data-tab="scurve"><button>📈 <span>S-Curve & Cash Flow</span></button></li>
                 <li class="nav-item" data-tab="extended"><button>🔬 <span>Deflection, USCS & Panels</span></button></li>
@@ -183,6 +184,52 @@
             </div>
         </div>
 
+        <!-- NEW: Final Tools Canvas Module -->
+        <div id="tab-final-tools" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Live Canvas Drawing & Rebar Lap Splice Engine</h3>
+                
+                <!-- Live Canvas Visualizer -->
+                <div>
+                    <h4>1. Live Scale Interactive Footing Drawing</h4>
+                    <div style="text-align:center; margin-top:10px;">
+                        <canvas id="footingCanvas" width="300" height="180" style="border:1px solid #334155; border-radius:8px; background:#0F172A;"></canvas>
+                        <br>
+                        <button class="btn btn-primary" onclick="drawFootingCanvas()" style="margin-top:8px; padding:4px 12px; font-size:11px;">🎨 Render Cross-Section</button>
+                    </div>
+                </div>
+
+                <!-- Rebar Lap Splice Engine -->
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h4>2. Rebar Development Length & Tension Lap Splice (ACI 318)</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Bar Diameter Ø (mm):</label><input type="number" id="lapDia" value="16" oninput="calcLapSplice()"></div>
+                        <div class="form-group"><label>Concrete Strength f'c (MPa):</label><input type="number" id="lapFc" value="28" oninput="calcLapSplice()"></div>
+                        <div class="form-group"><label>Rebar Yield Strength fy (MPa):</label><input type="number" id="lapFy" value="420" oninput="calcLapSplice()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Required Tension Lap Splice Length: <b id="lapMetersOut" class="text-accent">920 mm (0.92 m)</b></p>
+                        <p style="margin-top:4px;">Rule of Thumb Factor: <b id="lapRuleOut">~58d (Class B Splice)</b></p>
+                    </div>
+                </div>
+
+                <!-- Fuel Consumption Estimator -->
+                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
+                    <h4>3. Site Equipment Fuel & Power Cost Estimator</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Operating Hours / Day:</label><input type="number" id="fuelHours" value="8" oninput="calcFuelCost()"></div>
+                        <div class="form-group"><label>Equipment Engine Rating (HP):</label><input type="number" id="fuelPower" value="180" oninput="calcFuelCost()"></div>
+                        <div class="form-group"><label>Diesel Price per Liter ($):</label><input type="number" id="fuelPrice" value="0.65" step="0.05" oninput="calcFuelCost()"></div>
+                    </div>
+                    <div class="results-box" style="margin-top:10px;">
+                        <p>Daily Diesel Consumption: <b id="fuelLitersOut" class="text-accent">216 Liters (27.0 L/hr)</b></p>
+                        <p style="margin-top:4px;">Estimated Daily Fuel Cost: <b id="fuelCostOut">$140</b></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <!-- Hydraulics Module -->
         <div id="tab-hydraulics" class="tab-module" style="display:none;">
             <div class="calculator-card">
@@ -216,12 +263,10 @@
             </div>
         </div>
 
-        <!-- NEW: Extended Engineering Module -->
+        <!-- Extended Engineering Module -->
         <div id="tab-extended" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Advanced Engineering Calculations (USCS Soil, Deflection & Panels)</h3>
-                
-                <!-- Deflection Check -->
                 <div>
                     <h4>1. Beam Structural Deflection Verification (L/240 Limit)</h4>
                     <div class="form-grid">
@@ -232,7 +277,6 @@
                     <div id="bmDeflOut" style="margin-top:12px; font-size:15px;"></div>
                 </div>
 
-                <!-- USCS Soil Classification -->
                 <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
                     <h4>2. USCS Soil Classification (Unified Soil Classification System)</h4>
                     <div class="form-grid">
@@ -246,7 +290,6 @@
                     </div>
                 </div>
 
-                <!-- Sandwich Panel Estimator -->
                 <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
                     <h4>3. Cladding Sandwich Panel & Screw Estimator</h4>
                     <div class="form-grid">
@@ -259,11 +302,10 @@
                         <p style="margin-top:4px;">Fixing Accessories: <b id="pnlScrews">1000 TEK Screws (Self-Drilling)</b></p>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- 3. Site Materials & Formwork Tools Module -->
+        <!-- Site Materials & Formwork Tools Module -->
         <div id="tab-site-tools" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Site Material Takeoff & Formwork Estimator</h3>
@@ -493,6 +535,7 @@
     <script src="js/modules/site_tools.js"></script>
     <script src="js/modules/hydraulics_qc.js"></script>
     <script src="js/modules/extended_engineering.js"></script>
+    <script src="js/modules/final_touches.js"></script>
     <script src="js/modules/concrete.js"></script>
     <script src="js/modules/roads.js"></script>
     <script src="js/modules/survey.js"></script>
