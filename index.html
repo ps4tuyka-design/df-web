@@ -6,6 +6,9 @@
     <title>DF Civil & Oilfield Engineering Workstation</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js & jsPDF for Canvas & PDF Exports -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -39,9 +42,9 @@
             </div>
 
             <ul class="nav-list">
-                <li class="nav-item active" data-tab="shed"><button>🏗️ Steel Sheds & Trusses</button></li>
+                <li class="nav-item active" data-tab="shed"><button>🏗️ Steel Sheds, Purlins & Beams</button></li>
                 <li class="nav-item" data-tab="footings"><button>📐 Footings, FDT & Geotech</button></li>
-                <li class="nav-item" data-tab="canvas"><button>🎨 Canvas Visualizer & Splices</button></li>
+                <li class="nav-item" data-tab="canvas"><button>🎨 Canvas Visualizer & CAD Draft</button></li>
                 <li class="nav-item" data-tab="hydraulics"><button>💧 Pipelines & Hydraulics</button></li>
                 <li class="nav-item" data-tab="scurve"><button>📈 S-Curve & Cash Flow</button></li>
                 <li class="nav-item" data-tab="deflection"><button>➗ Deflection, USCS & Panels</button></li>
@@ -51,7 +54,7 @@
                 <li class="nav-item" data-tab="concrete"><button>🧱 Concrete & Buildings</button></li>
                 <li class="nav-item" data-tab="roads"><button>🛣️ Roads & Earthworks</button></li>
                 <li class="nav-item" data-tab="surveying"><button>📐 Surveying Tools</button></li>
-                <li class="nav-item" data-tab="technical"><button>📄 Technical Offer Draft</button></li>
+                <li class="nav-item" data-tab="technical"><button>📄 Technical Offer & PDF Export</button></li>
                 <li class="nav-item" data-tab="hse"><button>🛡️ HSE Risk Assessment</button></li>
             </ul>
         </div>
@@ -65,6 +68,7 @@
                 <p>Civil & Oilfield Workstation - Professional Copilot</p>
             </div>
             <div style="display:flex; gap:10px;">
+                <button class="btn btn-primary" onclick="exportPDFReport()">📄 Export PDF Report</button>
                 <button class="btn btn-theme" onclick="toggleTheme()">🌗 Theme</button>
             </div>
         </header>
@@ -85,15 +89,16 @@
             </div>
         </div>
 
-        <!-- TAB 1: STEEL SHEDS -->
+        <!-- TAB 1: STEEL SHEDS, PURLINS & BEAMS -->
         <div id="tab-shed" class="tab-module" style="display:block;">
             <div class="calculator-card">
-                <h3>Shed & Structural Parameters Input</h3>
+                <h3>Shed, Purlins (الطراحيات) & Structural Beams Input</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
                     <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
                     <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
                     <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="shedBay" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Purlin Spacing / الطراحيات (m):</label><input type="number" id="purlinSpace" value="1.2" oninput="calcShed()"></div>
                     <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="shedSteelPrice" value="950" oninput="calcShed()"></div>
                     <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="shedPanelPrice" value="18" oninput="calcShed()"></div>
                 </div>
@@ -125,15 +130,16 @@
             </div>
         </div>
 
-        <!-- TAB 3: CANVAS VISUALIZER -->
+        <!-- TAB 3: CANVAS VISUALIZER & DRAFT -->
         <div id="tab-canvas" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Canvas Visualizer & Splices</h3>
-                <p style="font-size:12px; color:var(--text-secondary);">Interactive structural frame wireframe and section preview.</p>
-                <div class="visualizer-container">
-                    <div class="svg-box">
-                        <svg id="structuralCanvas" width="300" height="180" style="background:#020617; border-radius:6px;"></svg>
-                    </div>
+                <h3>Interactive Structural Frame & Canvas Drawing</h3>
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Real-time interactive wireframe for beams, columns, and purlin distribution.</p>
+                <div class="visualizer-container" style="text-align:center;">
+                    <canvas id="structuralCanvas" width="600" height="300" style="background:#020617; border-radius:10px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+                <div style="margin-top:12px; display:flex; gap:10px;">
+                    <button class="btn btn-primary" onclick="drawStructuralFrame()">🔄 Redraw Structural Frame</button>
                 </div>
             </div>
         </div>
@@ -154,10 +160,13 @@
         <!-- TAB 5: S-CURVE -->
         <div id="tab-scurve" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Project Cash Flow & S-Curve</h3>
+                <h3>Project Cash Flow & S-Curve Graph</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Project Duration (Months):</label><input type="number" id="projMonths" value="6" oninput="generateSCurve()"></div>
                     <div class="form-group"><label>Total Budget ($):</label><input type="number" id="projBudget" value="250000" oninput="generateSCurve()"></div>
+                </div>
+                <div style="margin-top:20px; height:250px;">
+                    <canvas id="scurveChart"></canvas>
                 </div>
                 <div class="results-box"><div id="scurveResults"></div></div>
             </div>
@@ -166,7 +175,7 @@
         <!-- TAB 6: DEFLECTION & USCS -->
         <div id="tab-deflection" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Deflection & USCS Classification</h3>
+                <h3>Deflection, Beam Splices & USCS Classification</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Span Length L (m):</label><input type="number" id="spanL" value="6" oninput="checkDeflection()"></div>
                     <div class="form-group"><label>Max Deflection Delta (mm):</label><input type="number" id="defDelta" value="12" oninput="checkDeflection()"></div>
@@ -247,12 +256,15 @@
             </div>
         </div>
 
-        <!-- TAB 13: TECHNICAL OFFER -->
+        <!-- TAB 13: TECHNICAL OFFER & PDF EXPORT -->
         <div id="tab-technical" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Technical Offer Draft</h3>
-                <button class="btn btn-primary" onclick="generateOffer()">Generate Formal Proposal</button>
-                <div class="results-box" style="margin-top:12px;"><div id="technicalOfferOutput"></div></div>
+                <h3>Technical Offer Draft & Report Generation</h3>
+                <div style="display:flex; gap:10px; margin-bottom:12px;">
+                    <button class="btn btn-primary" onclick="generateOffer()">Generate Formal Proposal</button>
+                    <button class="btn btn-primary" style="background:#10B981;" onclick="exportPDFReport()">📥 Export Official PDF Document</button>
+                </div>
+                <div class="results-box"><div id="technicalOfferOutput"></div></div>
             </div>
         </div>
 
