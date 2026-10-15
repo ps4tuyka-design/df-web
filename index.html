@@ -1,124 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DF Civil & Oilfield Engineering Workstation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Sidebar Navigation -->
-    <div class="sidebar">
+    <!-- Splash Screen / Intro Entry -->
+    <div id="splashScreen" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:#020617; z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; transition: opacity 0.5s ease;">
+        <div class="brand-logo-hero" style="position:relative; width:90px; height:90px; background:linear-gradient(135deg, #2563EB, #06B6D4); border-radius:20px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:38px; color:#FFF; box-shadow:0 0 30px rgba(37,99,235,0.5); margin-bottom:20px;">
+            <span style="position:absolute; top:-12px; right:-10px; font-size:26px; transform:rotate(20deg);">👷‍♂️</span>
+            DF
+        </div>
+        <h1 style="color:#FFF; font-size:24px; font-weight:800; letter-spacing:1px; margin-bottom:8px;">DF ENGINEERING SUITE</h1>
+        <p style="color:#38BDF8; font-size:13px; font-weight:600; margin-bottom:28px;">Civil & Oilfield Workstation - Professional Copilot</p>
+        <button onclick="closeSplash()" style="background:linear-gradient(135deg, #2563EB, #06B6D4); color:#FFF; border:none; padding:12px 36px; border-radius:50px; font-size:14px; font-weight:800; cursor:pointer; box-shadow:0 4px 15px rgba(37,99,235,0.4); letter-spacing:1px; transition:transform 0.2s;">OPEN WORKSTATION ➔</button>
+    </div>
+
+    <!-- Sidebar Layout -->
+    <aside class="sidebar">
         <div>
-            <!-- DF Monogram Logo Header -->
             <div class="brand">
-                <div class="brand-logo">DF</div>
+                <div class="brand-logo" style="position:relative;">
+                    <span style="position:absolute; top:-7px; right:-5px; font-size:13px; transform:rotate(20deg);">👷‍♂️</span>
+                    DF
+                </div>
                 <div>
                     <div class="brand-title">DF ENGINEERING</div>
                     <div class="brand-sub">Civil & Oilfield Copilot</div>
                 </div>
             </div>
 
-            <!-- Project Management Panel -->
-            <div class="config-box">
-                <label>PROJECT MANAGER & SAVER:</label>
-                <div style="display: flex; gap: 4px; margin-bottom: 8px;">
-                    <select id="projectSelect" onchange="ProjectEngine.loadSelectedProject()" style="width:70%; padding:6px; background:#0F172A; color:#FFF; border:1px solid #334155; border-radius:4px; font-size:11px;"></select>
-                    <button onclick="ProjectEngine.saveCurrentProject(); showToast('Project Saved!','success');" style="width:30%; background:#2563EB; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">SAVE</button>
-                </div>
-                <div style="display: flex; gap: 4px;">
-                    <input type="text" id="newProjectName" placeholder="New Project Name" style="width:70%; padding:6px; font-size:11px;">
-                    <button onclick="ProjectEngine.createNewProject(); showToast('Project Created!','success');" style="width:30%; background:#10B981; color:#FFF; border:none; border-radius:4px; font-weight:bold; font-size:11px; cursor:pointer;">+ NEW</button>
-                </div>
-            </div>
-
-            <!-- Live Market Exchange Rate Box -->
             <div class="config-box">
                 <label>EXCHANGE RATE PER $100 (IQD):</label>
-                <input type="number" id="fxRate" value="153000">
-                <div class="fx-status" id="fxStatus">● Live Market FX Engine</div>
+                <input type="number" id="fxRate" value="153000" style="width:100%; padding:6px; font-size:12px; background:var(--bg-main); border:1px solid var(--border-color); color:var(--text-primary); border-radius:4px;" onchange="recalculateAll()">
+                <div class="fx-status">● Live Market FX Rate Active</div>
             </div>
 
-            <!-- Navigation Links -->
             <ul class="nav-list">
-                <li class="nav-item active" data-tab="shed"><button>🏗️ <span>Steel Sheds & Trusses</span></button></li>
-                <li class="nav-item" data-tab="foundation"><button>📐 <span>Footings, FDT & Geotech</span></button></li>
-                <li class="nav-item" data-tab="final-tools"><button>🎨 <span>Canvas Visualizer & Splices</span></button></li>
-                <li class="nav-item" data-tab="hydraulics"><button>💧 <span>Pipelines & Hydraulics</span></button></li>
-                <li class="nav-item" data-tab="scurve"><button>📈 <span>S-Curve & Cash Flow</span></button></li>
-                <li class="nav-item" data-tab="extended"><button>🔬 <span>Deflection, USCS & Panels</span></button></li>
-                <li class="nav-item" data-tab="site-tools"><button>🧰 <span>Site Materials & Formwork</span></button></li>
-                <li class="nav-item" data-tab="rebar-opt"><button>✂️ <span>Rebar Optimizer & Wastage</span></button></li>
-                <li class="nav-item" data-tab="machinery"><button>🚜 <span>Machinery & Fleet Logistics</span></button></li>
-                <li class="nav-item" data-tab="concrete"><button>🏢 <span>Concrete & Buildings</span></button></li>
-                <li class="nav-item" data-tab="roads"><button>🛣️ <span>Roads & Earthworks</span></button></li>
-                <li class="nav-item" data-tab="survey"><button>📐 <span>Surveying Tools</span></button></li>
-                <li class="nav-item" data-tab="offer"><button>📑 <span>Technical Offer Draft</span></button></li>
-                <li class="nav-item" data-tab="hse"><button>🛡️ <span>HSE Risk Assessment</span></button></li>
+                <li class="nav-item active" data-tab="shed"><button>🏗️ Steel Sheds & Trusses</button></li>
+                <li class="nav-item" data-tab="footings"><button>📐 Footings, FDT & Geotech</button></li>
+                <li class="nav-item" data-tab="canvas"><button>🎨 Canvas Visualizer & Splices</button></li>
+                <li class="nav-item" data-tab="hydraulics"><button>💧 Pipelines & Hydraulics</button></li>
+                <li class="nav-item" data-tab="scurve"><button>📈 S-Curve & Cash Flow</button></li>
+                <li class="nav-item" data-tab="deflection"><button>➗ Deflection, USCS & Panels</button></li>
+                <li class="nav-item" data-tab="materials"><button>🧰 Site Materials & Formwork</button></li>
+                <li class="nav-item" data-tab="rebar"><button>✂️ Rebar Optimizer & Wastage</button></li>
+                <li class="nav-item" data-tab="machinery"><button>🚜 Machinery & Fleet Logistics</button></li>
+                <li class="nav-item" data-tab="concrete"><button>🧱 Concrete & Buildings</button></li>
+                <li class="nav-item" data-tab="roads"><button>🛣️ Roads & Earthworks</button></li>
+                <li class="nav-item" data-tab="surveying"><button>📐 Surveying Tools</button></li>
+                <li class="nav-item" data-tab="technical"><button>📄 Technical Offer Draft</button></li>
+                <li class="nav-item" data-tab="hse"><button>🛡️ HSE Risk Assessment</button></li>
             </ul>
         </div>
-    </div>
-
-    <!-- Quick Unit Converter Floating Button -->
-    <button class="floating-converter-btn" onclick="document.getElementById('unitModal').style.display = document.getElementById('unitModal').style.display === 'none' ? 'block' : 'none'">⚡ Unit Converter</button>
-
-    <!-- Quick Converter Modal Window -->
-    <div id="unitModal" class="modal-pop" style="display:none;">
-        <div style="display:flex; justify-size:space-between; align-items:center; margin-bottom:12px;">
-            <h4 style="font-size:13px; font-weight:800;">Quick Field Converter</h4>
-            <button onclick="document.getElementById('unitModal').style.display='none'" style="background:none; border:none; color:#FFF; font-weight:bold; cursor:pointer;">✕</button>
-        </div>
-        <div class="form-group" style="margin-bottom:8px;">
-            <label>Value:</label>
-            <input type="number" id="unitVal" value="10" oninput="convertUnit()">
-        </div>
-        <div class="form-group">
-            <label>Conversion Type:</label>
-            <select id="unitType" onchange="convertUnit()">
-                <option value="m_ft">Meters to Feet (m → ft)</option>
-                <option value="ft_m">Feet to Meters (ft → m)</option>
-                <option value="psi_bar">PSI to Bar</option>
-                <option value="bar_psi">Bar to PSI</option>
-                <option value="kg_lb">Kg to Pounds (lbs)</option>
-            </select>
-        </div>
-        <div style="margin-top:12px; padding:8px; background:var(--bg-main); border-radius:6px; text-align:center;">
-            Result: <b id="unitOut" style="color:var(--accent-sky);">32.81 Feet (ft)</b>
-        </div>
-    </div>
+    </aside>
 
     <!-- Main Workspace -->
-    <div class="main-content">
-        <div class="header">
+    <main class="main-content">
+        <header class="header">
             <div>
-                <h1 id="currentProjectTitle">DF Engineering Suite</h1>
+                <h1>DF Engineering Suite</h1>
                 <p>Civil & Oilfield Workstation - Professional Copilot</p>
             </div>
-            <div style="display:flex; gap:8px;">
-                <button class="btn btn-theme" onclick="document.body.classList.toggle('light-theme')">☀️/🌙 Theme</button>
-                <button class="btn btn-primary" onclick="exportToExcel(); showToast('Exporting BOQ to Excel...','info');">📊 Export Full BOQ to Excel (.CSV)</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-theme" onclick="toggleTheme()">🌗 Theme</button>
             </div>
-        </div>
+        </header>
 
-        <!-- Printable Company Header Options -->
-        <div class="company-header-box">
-            <div style="flex:1;">
-                <label style="font-size:10px; font-weight:800; color:var(--text-secondary);">COMPANY / CONTRACTOR NAME FOR REPORTS:</label>
-                <input type="text" id="companyHeaderName" value="DF Engineering & General Contracting Co." style="width:100%; padding:6px; font-size:11px; background:var(--bg-main); border:1px solid var(--border-color); color:var(--text-primary); border-radius:4px; margin-top:4px;">
-            </div>
-            <div style="flex:1;">
-                <label style="font-size:10px; font-weight:800; color:var(--text-secondary);">SITE ENGINEER / DESIGNER:</label>
-                <input type="text" id="engineerHeaderName" value="Eng. DF Site Manager" style="width:100%; padding:6px; font-size:11px; background:var(--bg-main); border:1px solid var(--border-color); color:var(--text-primary); border-radius:4px; margin-top:4px;">
-            </div>
-        </div>
-
-        <!-- Top Summary Dashboard Metrics -->
+        <!-- Metrics Grid -->
         <div class="metrics-grid">
             <div class="metric-card">
                 <h4>Active Project Engine</h4>
-                <div class="metric-value" style="color:#10B981;">ONLINE (DF-V3)</div>
+                <div class="metric-value" style="color:var(--accent-green);">ONLINE (DF-V3)</div>
             </div>
             <div class="metric-card">
                 <h4>Rebar Wastage Target</h4>
@@ -126,474 +83,225 @@
             </div>
             <div class="metric-card">
                 <h4>Market Exchange Rate</h4>
-                <div class="metric-value" style="color:#F59E0B;">153,000 IQD</div>
+                <div class="metric-value" id="metricFx">153,000 IQD</div>
             </div>
         </div>
 
-        <!-- 1. Steel Sheds Module -->
-        <div id="tab-shed" class="tab-module active">
+        <!-- TAB 1: STEEL SHEDS -->
+        <div id="tab-shed" class="tab-module" style="display:block;">
             <div class="calculator-card">
                 <h3>Shed & Structural Parameters Input</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30"></div>
-                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15"></div>
-                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6"></div>
-                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="baySpacing" value="6"></div>
-                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="steelP" value="950"></div>
-                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="panelP" value="18"></div>
+                    <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="shedBay" value="6" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="shedSteelPrice" value="950" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="shedPanelPrice" value="18" oninput="calcShed()"></div>
                 </div>
-
-                <div class="visualizer-container">
-                    <div>
-                        <h4>2D Structural Frame Elevation</h4>
-                        <div class="svg-box">
-                            <svg width="220" height="160" viewBox="0 0 200 150">
-                                <path d="M 20 130 L 20 60 L 100 20 L 180 60 L 180 130" stroke="#2563EB" stroke-width="3" fill="none"/>
-                                <line x1="20" y1="60" x2="180" y2="60" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4"/>
-                                <line x1="20" y1="130" x2="180" y2="130" stroke="#64748B" stroke-width="2"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div>
-                        <h4>3D Structural Wireframe</h4>
-                        <div class="svg-box">
-                            <svg width="220" height="160" viewBox="0 0 200 150">
-                                <path d="M 30 110 L 80 130 L 170 90 L 120 70 Z" stroke="#38BDF8" stroke-width="1.5" fill="none"/>
-                                <path d="M 30 60 L 80 80 L 170 40 L 120 20 Z" stroke="#38BDF8" stroke-width="1.5" fill="none"/>
-                                <line x1="30" y1="110" x2="30" y2="60" stroke="#38BDF8" stroke-width="1.5"/>
-                                <line x1="80" y1="130" x2="80" y2="80" stroke="#38BDF8" stroke-width="1.5"/>
-                                <line x1="170" y1="90" x2="170" y2="40" stroke="#38BDF8" stroke-width="1.5"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="btnExportDXF">📐 Export AutoCAD (.DXF)</button>
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Shed & Steel Structure'); showToast('Generating Printable PDF...','info');">📄 Print / Export Technical Report</button>
-                </div>
-
-                <div class="method-box">
-                    <h4>Structural Specifications & Construction Method Statement:</h4>
-                    <p id="shedStructuralCheck">-</p>
-                </div>
-
                 <div class="results-box">
-                    <h3>Detailed Structural Members & BOQ</h3>
+                    <h4>Calculated Quantities & BOQ Summary</h4>
                     <table>
                         <thead>
-                            <tr><th>Member / Component</th><th>Recommended Profile</th><th>Quantity / Weight</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
+                            <tr><th>Item Description</th><th>Est. Quantity</th><th>Unit Price ($)</th><th>Total Price ($)</th><th>Total Price (IQD)</th></tr>
                         </thead>
-                        <tbody>
-                            <tr><td>Main Columns & Rafters</td><td id="secCol">IPE 300 / HEA 200</td><td id="mColQty">0</td><td>Ton</td><td id="mColUsd">$0</td><td id="mColIqd">0 IQD</td></tr>
-                            <tr><td>Roof & Wall Purlins</td><td>C200x2.0 Z-Purlins</td><td id="mPurQty">0</td><td>Ton</td><td id="mPurUsd">$0</td><td id="mPurIqd">0 IQD</td></tr>
-                            <tr><td>Wind Bracing & Rods</td><td>Ø20 Round Steel Bar</td><td id="mBrcQty">0</td><td>Ton</td><td id="mBrcUsd">$0</td><td id="mBrcIqd">0 IQD</td></tr>
-                            <tr><td>Base Plates & Anchor Bolts</td><td>Plates 20mm + M24 Bolts</td><td id="mAncQty">0</td><td>Sets</td><td id="mAncUsd">$0</td><td id="mAncIqd">0 IQD</td></tr>
-                            <tr><td>Sandwich Panel Cladding</td><td>50mm Polyurethane Panel</td><td id="mPanQty">0</td><td>m²</td><td id="mPanUsd">$0</td><td id="mPanIqd">0 IQD</td></tr>
-                            <tr class="total-row"><td>Total Estimated Cost</td><td>-</td><td>-</td><td>-</td><td id="shedTotalUsd">$0</td><td id="shedTotalIqd">0 IQD</td></tr>
-                        </tbody>
+                        <tbody id="shedTableBody"></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- 2. Foundation & Geotech Module -->
-        <div id="tab-foundation" class="tab-module" style="display:none;">
+        <!-- TAB 2: FOOTINGS -->
+        <div id="tab-footings" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Foundation Design & Geotech QC Tools</h3>
+                <h3>Footing & Geotechnical Engine</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Soil Bearing Capacity q_allow (kPa):</label><input type="number" id="ftgQallow" value="120" oninput="calcFoundation()"></div>
-                    <div class="form-group"><label>Axial Column Load (kN):</label><input type="number" id="ftgLoad" value="250" oninput="calcFoundation()"></div>
-                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="ftgConcP" value="85" oninput="calcFoundation()"></div>
-                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="ftgRebarP" value="900" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Footing Length L (m):</label><input type="number" id="footL" value="2.5" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Footing Width B (m):</label><input type="number" id="footB" value="2.5" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Thickness D (m):</label><input type="number" id="footD" value="0.6" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Soil Bearing Capacity (kPa):</label><input type="number" id="bearingCap" value="180" oninput="calcFoundation()"></div>
                 </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Isolated Footings & Geotech')">📄 Print / Export Foundation Report</button>
-                </div>
-
                 <div class="results-box">
-                    <h3>Isolated Footing Sizing & Quantity Output</h3>
-                    <p>Recommended Dimensions: <b id="ftgDim" class="text-accent">1.6m x 1.6m x 0.50m</b></p>
-                    <p style="margin-top:6px;">Concrete Volume per Footing: <b id="ftgConcVol">1.28</b> m³</p>
-                    <p style="margin-top:6px;">Required Excavation Volume: <b id="ftgExcVol">7.2</b> m³</p>
-                    <p style="margin-top:6px;">Rebar Weight per Footing: <b id="ftgRebarTon">0.10</b> Ton</p>
-                    <p style="margin-top:6px;">Cost / Footing (USD): <b id="ftgTotalUsd">$198</b></p>
-                    <p style="margin-top:6px;">Cost / Footing (IQD): <b id="ftgTotalIqd">300,000 IQD</b></p>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h3>Soil SPT Blow Count (N-Value) to Bearing Capacity</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Field SPT N-Value (Blows):</label><input type="number" id="sptNValue" value="16" oninput="calcSPT()"></div>
-                    </div>
-                    <p style="margin-top:10px;">Calculated Allowable Bearing Capacity: <b id="sptQallow" class="text-accent">200 kPa (2.00 kg/cm²)</b></p>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h3>Field Density Test Verification (FDT - Sand Cone)</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Wet Density (g/cm³):</label><input type="number" id="fdtWetDensity" value="2.18" step="0.01" oninput="calcFDT()"></div>
-                        <div class="form-group"><label>Moisture Content (%):</label><input type="number" id="fdtMoisture" value="6.5" step="0.1" oninput="calcFDT()"></div>
-                        <div class="form-group"><label>Proctor Max Dry Density - MDD (g/cm³):</label><input type="number" id="fdtMDD" value="2.15" step="0.01" oninput="calcFDT()"></div>
-                    </div>
-                    <div id="fdtResult" style="margin-top:12px; font-size:15px;"></div>
+                    <div id="footingResults"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Canvas Module -->
-        <div id="tab-final-tools" class="tab-module" style="display:none;">
+        <!-- TAB 3: CANVAS VISUALIZER -->
+        <div id="tab-canvas" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Live Canvas Drawing & Rebar Lap Splice Engine</h3>
-                <div>
-                    <h4>1. Live Scale Interactive Footing Drawing</h4>
-                    <div style="text-align:center; margin-top:10px;">
-                        <canvas id="footingCanvas" width="300" height="180" style="border:1px solid #334155; border-radius:8px; background:#0F172A;"></canvas>
-                        <br>
-                        <button class="btn btn-primary" onclick="drawFootingCanvas()" style="margin-top:8px; padding:4px 12px; font-size:11px;">🎨 Render Cross-Section</button>
-                    </div>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>2. Rebar Development Length & Tension Lap Splice (ACI 318)</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Bar Diameter Ø (mm):</label><input type="number" id="lapDia" value="16" oninput="calcLapSplice()"></div>
-                        <div class="form-group"><label>Concrete Strength f'c (MPa):</label><input type="number" id="lapFc" value="28" oninput="calcLapSplice()"></div>
-                        <div class="form-group"><label>Rebar Yield Strength fy (MPa):</label><input type="number" id="lapFy" value="420" oninput="calcLapSplice()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Required Tension Lap Splice Length: <b id="lapMetersOut" class="text-accent">920 mm (0.92 m)</b></p>
-                        <p style="margin-top:4px;">Rule of Thumb Factor: <b id="lapRuleOut">~58d (Class B Splice)</b></p>
-                    </div>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>3. Site Equipment Fuel & Power Cost Estimator</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Operating Hours / Day:</label><input type="number" id="fuelHours" value="8" oninput="calcFuelCost()"></div>
-                        <div class="form-group"><label>Equipment Engine Rating (HP):</label><input type="number" id="fuelPower" value="180" oninput="calcFuelCost()"></div>
-                        <div class="form-group"><label>Diesel Price per Liter ($):</label><input type="number" id="fuelPrice" value="0.65" step="0.05" oninput="calcFuelCost()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Daily Diesel Consumption: <b id="fuelLitersOut" class="text-accent">216 Liters (27.0 L/hr)</b></p>
-                        <p style="margin-top:4px;">Estimated Daily Fuel Cost: <b id="fuelCostOut">$140</b></p>
+                <h3>Canvas Visualizer & Splices</h3>
+                <p style="font-size:12px; color:var(--text-secondary);">Interactive structural frame wireframe and section preview.</p>
+                <div class="visualizer-container">
+                    <div class="svg-box">
+                        <svg id="structuralCanvas" width="300" height="180" style="background:#020617; border-radius:6px;"></svg>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Hydraulics Module -->
+        <!-- TAB 4: HYDRAULICS -->
         <div id="tab-hydraulics" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Pipeline Hydraulics & Pressure Drop Analysis</h3>
+                <h3>Pipeline & Hydraulics Analysis</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Flow Rate (L/s):</label><input type="number" id="pipeFlow" value="25" oninput="calcHydraulics()"></div>
-                    <div class="form-group"><label>Pipe Internal Diameter (mm):</label><input type="number" id="pipeDia" value="150" oninput="calcHydraulics()"></div>
-                    <div class="form-group"><label>Pipeline Length (m):</label><input type="number" id="pipeLen" value="200" oninput="calcHydraulics()"></div>
-                    <div class="form-group"><label>Hazen-Williams C Factor:</label><input type="number" id="pipeC" value="130" oninput="calcHydraulics()"></div>
+                    <div class="form-group"><label>Pipe Diameter D (mm):</label><input type="number" id="pipeD" value="250" oninput="calcHydraulics()"></div>
+                    <div class="form-group"><label>Flow Rate Q (L/s):</label><input type="number" id="flowQ" value="45" oninput="calcHydraulics()"></div>
+                    <div class="form-group"><label>Pipeline Length L (m):</label><input type="number" id="pipeL" value="1200" oninput="calcHydraulics()"></div>
                 </div>
-                <div class="results-box" style="margin-top:15px;">
-                    <p>Flow Velocity: <b id="hydVelocity" class="text-accent">1.41 m/s</b></p>
-                    <p style="margin-top:6px;">Friction Head Loss: <b id="hydHeadLoss">2.45 m H₂O</b></p>
-                    <p style="margin-top:6px;">Pressure Drop: <b id="hydPressDrop">0.24 Bar</b></p>
-                </div>
+                <div class="results-box"><div id="hydraulicsResults"></div></div>
             </div>
         </div>
 
-        <!-- S-Curve Cashflow Module -->
+        <!-- TAB 5: S-CURVE -->
         <div id="tab-scurve" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>S-Curve Financial Forecast & Monthly Cash Flow</h3>
+                <h3>Project Cash Flow & S-Curve</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Total Contract Budget ($):</label><input type="number" id="scurveBudget" value="150000" oninput="generateSCurve()"></div>
-                    <div class="form-group"><label>Project Duration (Months):</label><input type="number" id="scurveMonths" value="6" oninput="generateSCurve()"></div>
+                    <div class="form-group"><label>Project Duration (Months):</label><input type="number" id="projMonths" value="6" oninput="generateSCurve()"></div>
+                    <div class="form-group"><label>Total Budget ($):</label><input type="number" id="projBudget" value="250000" oninput="generateSCurve()"></div>
                 </div>
-                <div class="results-box" style="margin-top:15px;">
-                    <h4>Monthly Cash Flow Breakdown Table</h4>
-                    <div id="scurveOutput"></div>
-                </div>
+                <div class="results-box"><div id="scurveResults"></div></div>
             </div>
         </div>
 
-        <!-- Extended Engineering Module -->
-        <div id="tab-extended" class="tab-module" style="display:none;">
+        <!-- TAB 6: DEFLECTION & USCS -->
+        <div id="tab-deflection" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Advanced Engineering Calculations (USCS Soil, Deflection & Panels)</h3>
-                <div>
-                    <h4>1. Beam Structural Deflection Verification (L/240 Limit)</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Beam Span L (m):</label><input type="number" id="bmSpan" value="6.0" oninput="checkDeflection()"></div>
-                        <div class="form-group"><label>Uniform Load w (kN/m):</label><input type="number" id="bmLoad" value="12.0" oninput="checkDeflection()"></div>
-                        <div class="form-group"><label>Section Moment of Inertia Ix (cm⁴):</label><input type="number" id="bmInertia" value="8356" oninput="checkDeflection()"></div>
-                    </div>
-                    <div id="bmDeflOut" style="margin-top:12px; font-size:15px;"></div>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>2. USCS Soil Classification (Unified Soil Classification System)</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Pass No.200 Sieve (%):</label><input type="number" id="soilPass200" value="25" oninput="classifySoil()"></div>
-                        <div class="form-group"><label>Liquid Limit - LL (%):</label><input type="number" id="soilLL" value="35" oninput="classifySoil()"></div>
-                        <div class="form-group"><label>Plastic Limit - PL (%):</label><input type="number" id="soilPL" value="20" oninput="classifySoil()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Soil Group Symbol: <b id="soilSymbolOut" class="text-accent">S-G (Sand/Gravel)</b></p>
-                        <p style="margin-top:4px;">Engineering Evaluation: <b id="soilDescOut">Coarse-Grained Soil - Excellent for Sub-base and Foundation Bedding</b></p>
-                    </div>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>3. Cladding Sandwich Panel & Screw Estimator</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Cladding Surface Area (m²):</label><input type="number" id="pnlArea" value="250" oninput="calcPanels()"></div>
-                        <div class="form-group"><label>Panel Effective Width (m):</label><input type="number" id="pnlWidth" value="1.0" oninput="calcPanels()"></div>
-                        <div class="form-group"><label>Panel Cut Length (m):</label><input type="number" id="pnlLength" value="6.0" oninput="calcPanels()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Required Panels (5% waste): <b id="pnlCount" class="text-accent">44 Panels (6.0m length)</b></p>
-                        <p style="margin-top:4px;">Fixing Accessories: <b id="pnlScrews">1000 TEK Screws (Self-Drilling)</b></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Site Materials & Formwork Tools Module -->
-        <div id="tab-site-tools" class="tab-module" style="display:none;">
-            <div class="calculator-card">
-                <h3>Site Material Takeoff & Formwork Estimator</h3>
-                <div>
-                    <h4>1. Detailed Rebar Unit Weight Calculator</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Bar Diameter Ø (mm):</label><input type="number" id="rebarDia" value="16" oninput="calcRebarDetails()"></div>
-                        <div class="form-group"><label>Total Required Length (m):</label><input type="number" id="rebarTotalLen" value="100" oninput="calcRebarDetails()"></div>
-                        <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarPricePerTon" value="900" oninput="calcRebarDetails()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Unit Weight per Metre: <b id="rebarKgPerM" class="text-accent">1.580 kg/m</b></p>
-                        <p style="margin-top:4px;">Total Weight: <b id="rebarTotalTon">0.158 Ton (158.0 kg)</b></p>
-                        <p style="margin-top:4px;">Total Estimated Cost (USD): <b id="rebarCostUsd">$142</b></p>
-                        <p style="margin-top:4px;">Total Estimated Cost (IQD): <b id="rebarCostIqd">217,500 IQD</b></p>
-                    </div>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>2. Concrete Mix Design & Sand Moisture Correction</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Target Concrete Volume (m³):</label><input type="number" id="mixVol" value="10" oninput="calcMixDesign()"></div>
-                        <div class="form-group"><label>Sand Moisture Content (%):</label><input type="number" id="sandMoist" value="4" step="0.5" oninput="calcMixDesign()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Cement Required: <b id="mixCementBags" class="text-accent">76 Bags (3.80 Ton)</b></p>
-                        <p style="margin-top:4px;">Sand (Moisture Adjusted): <b id="mixSandKg">7,280 kg</b></p>
-                        <p style="margin-top:4px;">Coarse Aggregate (Gravel): <b id="mixGravelKg">11,500 kg</b></p>
-                        <p style="margin-top:4px;">Effective Mixing Water: <b id="mixWaterL">1,520 Litres</b></p>
-                    </div>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>3. Formwork & Plywood Sheet Estimator</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Shuttering Surface Area (m²):</label><input type="number" id="formworkArea" value="120" oninput="calcFormwork()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Plywood Sheets Required (incl. 10% waste): <b id="formPlywoodSheets" class="text-accent">45 Sheets (1.22x2.44m)</b></p>
-                        <p style="margin-top:4px;">Timber Props / Vertical Posts Needed: <b id="formTimberProps">180 Props / Posts</b></p>
-                    </div>
-                </div>
-
-                <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
-                    <h4>4. Blockwork Masonry & Mortar Estimator</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Wall Length (m):</label><input type="number" id="wallLength" value="10" oninput="calcMasonry()"></div>
-                        <div class="form-group"><label>Wall Height (m):</label><input type="number" id="wallHeight" value="3" oninput="calcMasonry()"></div>
-                    </div>
-                    <div class="results-box" style="margin-top:10px;">
-                        <p>Concrete Hollow Blocks Required (20x20x40cm): <b id="blockTotalQty" class="text-accent">394 Blocks</b></p>
-                        <p style="margin-top:4px;">Mortar Cement Required: <b id="mortarCementBags">4 Bags (50kg)</b></p>
-                        <p style="margin-top:4px;">Mortar Sand Required: <b id="mortarSandVol">0.54 m³ Sand</b></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. Rebar Optimizer Module -->
-        <div id="tab-rebar-opt" class="tab-module" style="display:none;">
-            <div class="calculator-card">
-                <h3>Rebar Cutting Optimizer & Wastage Minimizer</h3>
+                <h3>Deflection & USCS Classification</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Stock Bar Standard Length (m):</label><input type="number" id="stockBarLen" value="12" oninput="optimizeRebar()"></div>
-                    <div class="form-group"><label>Required Cut Length (m):</label><input type="number" id="cutReqLen" value="3.8" step="0.1" oninput="optimizeRebar()"></div>
-                    <div class="form-group"><label>Total Pieces Required:</label><input type="number" id="cutReqQty" value="25" oninput="optimizeRebar()"></div>
+                    <div class="form-group"><label>Span Length L (m):</label><input type="number" id="spanL" value="6" oninput="checkDeflection()"></div>
+                    <div class="form-group"><label>Max Deflection Delta (mm):</label><input type="number" id="defDelta" value="12" oninput="checkDeflection()"></div>
                 </div>
-                <div class="results-box">
-                    <h3>Cut Optimization Results</h3>
-                    <p>Total Stock Bars Required (12m): <b id="optBarsNeeded" class="text-accent">9</b> Bars</p>
-                    <p style="margin-top:6px;">Pieces Yielded Per Bar: <b id="optPcsPerBar">3</b> Pieces</p>
-                    <p style="margin-top:6px;">Total Scrap / Wastage: <b id="optWastage">6.00 m (5.6%)</b></p>
-                </div>
+                <div class="results-box"><div id="deflectionResults"></div></div>
             </div>
         </div>
 
-        <!-- 5. Machinery & Fleet Logistics -->
+        <!-- TAB 7: MATERIALS -->
+        <div id="tab-materials" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Site Materials & Formwork</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Slab Area (m²):</label><input type="number" id="slabArea" value="150" oninput="calcFormwork()"></div>
+                </div>
+                <div class="results-box"><div id="materialsResults"></div></div>
+            </div>
+        </div>
+
+        <!-- TAB 8: REBAR OPTIMIZER -->
+        <div id="tab-rebar" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Rebar Optimizer</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Bar Dia (mm):</label><input type="number" id="rebarDia" value="16" oninput="optimizeRebar()"></div>
+                    <div class="form-group"><label>Cut Length (m):</label><input type="number" id="cutLen" value="3.8" oninput="optimizeRebar()"></div>
+                    <div class="form-group"><label>Total Pieces:</label><input type="number" id="barPieces" value="120" oninput="optimizeRebar()"></div>
+                </div>
+                <div class="results-box"><div id="rebarResults"></div></div>
+            </div>
+        </div>
+
+        <!-- TAB 9: MACHINERY -->
         <div id="tab-machinery" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Site Machinery & Equipment Fleet Logistics</h3>
+                <h3>Machinery & Fleet Logistics</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Total Concrete Pour Volume (m³):</label><input type="number" id="fleetConcVol" value="200" oninput="calcMachinery()"></div>
-                    <div class="form-group"><label>Max Allowed Pour Duration (Hours):</label><input type="number" id="fleetHours" value="5" oninput="calcMachinery()"></div>
-                    <div class="form-group"><label>Transit Mixer Capacity (m³):</label><input type="number" id="mixerCap" value="9" oninput="calcMachinery()"></div>
+                    <div class="form-group"><label>Total Volume to Excavate (m³):</label><input type="number" id="excVol" value="5000" oninput="calcMachinery()"></div>
+                    <div class="form-group"><label>Dispatch Rate Needed (m³/hr):</label><input type="number" id="excRate" value="80" oninput="calcMachinery()"></div>
                 </div>
-                <div class="results-box">
-                    <h3>Logistics & Mixer Fleet Demand</h3>
-                    <p>Total Required Transit Mixer Trips: <b id="fleetTrips" class="text-accent">23</b> Trips</p>
-                    <p style="margin-top:6px;">Dispatch Dispatch Rate Needed: <b id="fleetRate">4.6 Trips / Hour</b></p>
-                </div>
+                <div class="results-box"><div id="machineryResults"></div></div>
             </div>
         </div>
 
-        <!-- 6. Concrete Module -->
-        <div id="tab-concrete" class="tab-module">
+        <!-- TAB 10: CONCRETE -->
+        <div id="tab-concrete" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Reinforced Concrete & Foundation Sizing</h3>
+                <h3>Concrete Mix Design</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Building Length (m):</label><input type="number" id="concL" value="20"></div>
-                    <div class="form-group"><label>Building Width (m):</label><input type="number" id="concW" value="10"></div>
-                    <div class="form-group"><label>Slab/Raft Thickness (cm):</label><input type="number" id="concT" value="40"></div>
-                    <div class="form-group"><label>Concrete Price / m³ ($):</label><input type="number" id="concP" value="85"></div>
-                    <div class="form-group"><label>Rebar Price / Ton ($):</label><input type="number" id="rebarP" value="750"></div>
+                    <div class="form-group"><label>Target Concrete Vol (m³):</label><input type="number" id="concVol" value="50" oninput="calcConcrete()"></div>
                 </div>
+                <div class="results-box"><div id="concreteResults"></div></div>
+            </div>
+        </div>
 
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Concrete & Foundation Design')">📄 Print / Export Concrete PDF Report</button>
+        <!-- TAB 11: ROADS -->
+        <div id="tab-roads" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Roads & Subbase Calculation</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
                 </div>
+                <div class="results-box"><div id="roadsResults"></div></div>
+            </div>
+        </div>
 
+        <!-- TAB 12: SURVEYING -->
+        <div id="tab-surveying" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Surveying & Leveling</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Benchmark Height BM (m):</label><input type="number" id="bmHeight" value="100.00" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Back Sight BS (m):</label><input type="number" id="bsVal" value="1.45" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Fore Sight FS (m):</label><input type="number" id="fsVal" value="2.10" oninput="calcSurvey()"></div>
+                </div>
+                <div class="results-box"><div id="surveyResults"></div></div>
+            </div>
+        </div>
+
+        <!-- TAB 13: TECHNICAL OFFER -->
+        <div id="tab-technical" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Technical Offer Draft</h3>
+                <button class="btn btn-primary" onclick="generateOffer()">Generate Formal Proposal</button>
+                <div class="results-box" style="margin-top:12px;"><div id="technicalOfferOutput"></div></div>
+            </div>
+        </div>
+
+        <!-- TAB 14: HSE -->
+        <div id="tab-hse" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>HSE Risk Matrix</h3>
                 <div class="results-box">
-                    <h3>Reinforcement & Material Breakdown</h3>
                     <table>
-                        <thead>
-                            <tr><th>Item Description</th><th>Specification</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
-                        </thead>
+                        <thead><tr><th>Activity</th><th>Hazard</th><th>Risk Level</th><th>Mitigation Measure</th></tr></thead>
                         <tbody>
-                            <tr><td>Ready-Mix Concrete C30/37</td><td>Sulfate Resisting Cement (SRC)</td><td id="concVol">0</td><td>m³</td><td id="concCostUsd">$0</td><td id="concCostIqd">0 IQD</td></tr>
-                            <tr><td>Main Rebar (Ø16mm - Ø20mm)</td><td>High Yield Deformed Bar (Grade 60)</td><td id="rebarMainTon">0</td><td>Ton</td><td id="rebarMainUsd">$0</td><td id="rebarMainIqd">0 IQD</td></tr>
-                            <tr><td>Stirrups & Ties (Ø10mm - Ø12mm)</td><td>Mild / Deformed Steel Bar</td><td id="rebarSecTon">0</td><td>Ton</td><td id="rebarSecUsd">$0</td><td id="rebarSecIqd">0 IQD</td></tr>
+                            <tr><td>Excavation</td><td>Cave-in / Collapse</td><td><span class="badge-danger">HIGH</span></td><td>Sloping 1:1, Benching, Shoring</td></tr>
+                            <tr><td>Lifting Ops</td><td>Crane Overturn</td><td><span class="badge-danger">HIGH</span></td><td>Outrigger Pads, Load Chart Check</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- 7. Roads Module -->
-        <div id="tab-roads" class="tab-module">
-            <div class="calculator-card">
-                <h3>Road Layers & Earthworks Analysis</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500"></div>
-                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8"></div>
-                    <div class="form-group"><label>Sub-base Thickness (cm):</label><input type="number" id="subbaseT" value="25"></div>
-                    <div class="form-group"><label>Sub-base Unit Price ($/m³):</label><input type="number" id="subbaseP" value="12"></div>
-                </div>
+    </main>
 
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Roads & Earthworks')">📄 Print / Export Earthworks PDF Report</button>
-                </div>
+    <!-- Quick Unit Converter Floating Button -->
+    <button class="floating-converter-btn" onclick="document.getElementById('unitModal').style.display = document.getElementById('unitModal').style.display === 'none' ? 'block' : 'none'">⚡ Unit Converter</button>
 
-                <div class="results-box">
-                    <h3>Logistics & Quantities Summary</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Layer / Logistic Item</th><th>Quantity</th><th>Unit</th><th>Cost ($ USD)</th><th>Cost (IQD)</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Compacted Sub-base (Class B)</td><td id="subVol">0</td><td>m³</td><td id="subUsd">$0</td><td id="subIqd">0 IQD</td></tr>
-                            <tr><td>Tipper Truck Fleet Required (18m³ capacity)</td><td id="trucksCount">0</td><td>Trips</td><td>-</td><td>-</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <!-- Unit Converter Modal -->
+    <div id="unitModal" class="modal-pop" style="display:none;">
+        <h4 style="margin-bottom:10px;">Quick Unit Converter</h4>
+        <div class="form-group" style="margin-bottom:8px;">
+            <label>Length (m to ft):</label>
+            <input type="number" id="mInput" placeholder="Meters" oninput="document.getElementById('ftOutput').value = (this.value * 3.28084).toFixed(2)">
+            <input type="text" id="ftOutput" readonly placeholder="Feet" style="margin-top:4px; background:var(--bg-card);">
         </div>
-
-        <!-- 8. Surveying Module -->
-        <div id="tab-survey" class="tab-module">
-            <div class="calculator-card">
-                <h3>Leveling & Topographic Field Calculations</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Benchmark Elevation (BM) (m):</label><input type="number" id="bmVal" value="10.00"></div>
-                    <div class="form-group"><label>Back Sight (BS) (m):</label><input type="number" id="bsVal" value="1.45"></div>
-                    <div class="form-group"><label>Fore Sight (FS) (m):</label><input type="number" id="fsVal" value="0.85"></div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Surveying Level Sheet')">📄 Print / Export Level Sheet PDF</button>
-                </div>
-
-                <div class="results-box">
-                    <h3>Level Sheet Results</h3>
-                    <p>Height of Instrument (HI): <b id="hiVal" class="text-accent">0.00</b> m</p>
-                    <p style="margin-top:8px;">Reduced Level (RL): <b id="rlVal" class="text-accent">0.00</b> m</p>
-                </div>
-            </div>
+        <div class="form-group" style="margin-bottom:8px;">
+            <label>Pressure (PSI to Bar):</label>
+            <input type="number" id="psiInput" placeholder="PSI" oninput="document.getElementById('barOutput').value = (this.value * 0.0689476).toFixed(2)">
+            <input type="text" id="barOutput" readonly placeholder="Bar" style="margin-top:4px; background:var(--bg-card);">
         </div>
-
-        <!-- 9. Technical Offer Draft -->
-        <div id="tab-offer" class="tab-module">
-            <div class="calculator-card">
-                <h3>Technical Proposal & Method Statement Generator</h3>
-                <div class="form-grid">
-                    <div class="form-group"><label>Project Title:</label><input type="text" id="projName" value="Construction of Industrial Storage Facilities"></div>
-                    <div class="form-group"><label>Supervising Authority:</label><input type="text" id="clientName" value="Project Management Office"></div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('Technical Proposal')">📄 Print / Export Proposal PDF</button>
-                </div>
-
-                <div class="results-box">
-                    <h4>Scope of Work & Method Statement:</h4>
-                    <p id="offerContent" class="code-preview"></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 10. HSE Safety Module -->
-        <div id="tab-hse" class="tab-module">
-            <div class="calculator-card">
-                <h3>HSE Risk Assessment & Mitigation Plan</h3>
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="ExportEngine.generatePDF('HSE Safety Plan')">📄 Print / Export HSE Plan PDF</button>
-                </div>
-                <div class="results-box">
-                    <table>
-                        <thead><tr><th>Site Activity</th><th>Potential Hazard</th><th>Risk Level</th><th>Control & Mitigation Measures</th></tr></thead>
-                        <tbody>
-                            <tr><td>Deep Excavations & Trenching</td><td>Soil Collapse / Cave-in</td><td><span class="badge-danger">HIGH</span></td><td>Implement 1:1 Safe Sloping & Shoring Systems.</td></tr>
-                            <tr><td>Crane Heavy Lifting Operations</td><td>Falling Load / Boom Failure</td><td><span class="badge-danger">HIGH</span></td><td>Inspect Wire Ropes, Verify Load Chart & Barricade Lifting Zone.</td></tr>
-                            <tr><td>Steel Erection at Heights</td><td>Personnel Fall from Structure</td><td><span class="badge-danger">HIGH</span></td><td>Mandatory 100% Double Lanyard Harness & Safety Netting.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
+        <button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="document.getElementById('unitModal').style.display='none'">Close</button>
     </div>
 
-    <!-- Script Files Execution -->
-    <script src="js/currency.js"></script>
-    <script src="js/projects.js"></script>
-    <script src="js/exports.js"></script>
-    <script src="js/modules/shed.js"></script>
-    <script src="js/modules/foundation.js"></script>
-    <script src="js/modules/advanced.js"></script>
-    <script src="js/modules/site_tools.js"></script>
-    <script src="js/modules/hydraulics_qc.js"></script>
-    <script src="js/modules/extended_engineering.js"></script>
-    <script src="js/modules/final_touches.js"></script>
-    <script src="js/modules/ui_enhancements.js"></script>
-    <script src="js/modules/concrete.js"></script>
-    <script src="js/modules/roads.js"></script>
-    <script src="js/modules/survey.js"></script>
-    <script src="js/modules/offer.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        function closeSplash() {
+            const splash = document.getElementById('splashScreen');
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.display = 'none'; }, 500);
+        }
+    </script>
 </body>
 </html>
