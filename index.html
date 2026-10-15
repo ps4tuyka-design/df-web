@@ -6,13 +6,12 @@
     <title>DF Civil & Oilfield Engineering Workstation</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Chart.js & jsPDF for Canvas & PDF Exports -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-    <!-- Splash Screen / Intro Entry -->
+    <!-- Splash Screen -->
     <div id="splashScreen" class="splash-screen">
         <div class="brand-logo-hero" style="background:transparent; box-shadow:none; border:none; width:auto; height:auto; margin-bottom:16px;">
             <img src="logo.png" alt="DF Engineering Suite Logo" style="width: 160px; height: auto; filter: drop-shadow(0 12px 25px rgba(0,0,0,0.6));">
@@ -44,23 +43,23 @@
             <ul class="nav-list">
                 <li class="nav-item active" data-tab="shed"><button>🏗️ Steel Sheds, Purlins & Beams</button></li>
                 <li class="nav-item" data-tab="footings"><button>📐 Footings, FDT & Geotech</button></li>
-                <li class="nav-item" data-tab="canvas"><button>🎨 Canvas Visualizer & CAD Draft</button></li>
                 <li class="nav-item" data-tab="hydraulics"><button>💧 Pipelines & Hydraulics</button></li>
                 <li class="nav-item" data-tab="scurve"><button>📈 S-Curve & Cash Flow</button></li>
                 <li class="nav-item" data-tab="deflection"><button>➗ Deflection, USCS & Panels</button></li>
                 <li class="nav-item" data-tab="materials"><button>🧰 Site Materials & Formwork</button></li>
                 <li class="nav-item" data-tab="rebar"><button>✂️ Rebar Optimizer & Wastage</button></li>
                 <li class="nav-item" data-tab="machinery"><button>🚜 Machinery & Fleet Logistics</button></li>
-                <li class="nav-item" data-tab="concrete"><button>🧱 Concrete & Buildings</button></li>
+                <li class="nav-item" data-tab="concrete"><button>🧱 Concrete & Mix Design</button></li>
                 <li class="nav-item" data-tab="roads"><button>🛣️ Roads & Earthworks</button></li>
-                <li class="nav-item" data-tab="surveying"><button>📐 Surveying Tools</button></li>
-                <li class="nav-item" data-tab="technical"><button>📄 Technical Offer & PDF Export</button></li>
+                <li class="nav-item" data-tab="surveying"><button>📐 Surveying & Leveling</button></li>
                 <li class="nav-item" data-tab="hse"><button>🛡️ HSE Risk Assessment</button></li>
+                <li class="nav-item" data-tab="technical"><button>📄 Technical Offer & PDF Export</button></li>
+                <li class="nav-item" data-tab="canvas"><button>🎨 Universal Canvas & Freehand Draft</button></li>
             </ul>
         </div>
     </aside>
 
-    <!-- Main Workspace -->
+    <!-- Main Content Workstation -->
     <main class="main-content">
         <header class="header">
             <div>
@@ -73,7 +72,7 @@
             </div>
         </header>
 
-        <!-- Metrics Grid -->
+        <!-- Top Metrics Bar -->
         <div class="metrics-grid">
             <div class="metric-card">
                 <h4>Active Project Engine</h4>
@@ -89,19 +88,27 @@
             </div>
         </div>
 
-        <!-- TAB 1: STEEL SHEDS, PURLINS & BEAMS -->
+        <!-- 1. STEEL SHEDS & BEAMS -->
         <div id="tab-shed" class="tab-module" style="display:block;">
             <div class="calculator-card">
-                <h3>Shed, Purlins & Structural Beams Input</h3>
+                <h3>Shed, Purlins & Structural Beams Workstation</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Shed Length L (m):</label><input type="number" id="shedL" value="30" oninput="calcShed()"></div>
                     <div class="form-group"><label>Shed Width W (m):</label><input type="number" id="shedW" value="15" oninput="calcShed()"></div>
                     <div class="form-group"><label>Eave Height H (m):</label><input type="number" id="shedH" value="6" oninput="calcShed()"></div>
                     <div class="form-group"><label>Bay Spacing (m):</label><input type="number" id="shedBay" value="6" oninput="calcShed()"></div>
                     <div class="form-group"><label>Purlin Spacing (m):</label><input type="number" id="purlinSpace" value="1.2" oninput="calcShed()"></div>
+                    <div class="form-group"><label>Steel Yield Strength Fy (MPa):</label><input type="number" id="steelFy" value="275" oninput="calcShed()"></div>
                     <div class="form-group"><label>Steel Price / Ton ($):</label><input type="number" id="shedSteelPrice" value="950" oninput="calcShed()"></div>
                     <div class="form-group"><label>Panel Price / m² ($):</label><input type="number" id="shedPanelPrice" value="18" oninput="calcShed()"></div>
                 </div>
+
+                <!-- Dedicated Module Drawing Canvas -->
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Structural Frame & Purlin Distribution Scheme</h4>
+                    <canvas id="shedCanvas" width="600" height="240" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box">
                     <h4>Calculated Quantities & BOQ Summary</h4>
                     <table>
@@ -114,37 +121,29 @@
             </div>
         </div>
 
-        <!-- TAB 2: FOOTINGS -->
+        <!-- 2. FOOTINGS & GEOTECH -->
         <div id="tab-footings" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Footing & Geotechnical Engine</h3>
+                <h3>Footing, FDT & Geotechnical Engine</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Footing Length L (m):</label><input type="number" id="footL" value="2.5" oninput="calcFoundation()"></div>
                     <div class="form-group"><label>Footing Width B (m):</label><input type="number" id="footB" value="2.5" oninput="calcFoundation()"></div>
                     <div class="form-group"><label>Thickness D (m):</label><input type="number" id="footD" value="0.6" oninput="calcFoundation()"></div>
                     <div class="form-group"><label>Soil Bearing Capacity (kPa):</label><input type="number" id="bearingCap" value="180" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Column Section (m x m):</label><input type="number" id="colSec" value="0.4" oninput="calcFoundation()"></div>
+                    <div class="form-group"><label>Concrete Fc (MPa):</label><input type="number" id="footFc" value="30" oninput="calcFoundation()"></div>
                 </div>
-                <div class="results-box">
-                    <div id="footingResults"></div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Foundation Cross-Section & Soil Pressure Bulb</h4>
+                    <canvas id="footingCanvas" width="500" height="220" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
                 </div>
+
+                <div class="results-box"><div id="footingResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 3: CANVAS VISUALIZER & DRAFT -->
-        <div id="tab-canvas" class="tab-module" style="display:none;">
-            <div class="calculator-card">
-                <h3>Interactive Structural Frame & Canvas Drawing</h3>
-                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Real-time interactive wireframe for beams, columns, and purlin distribution.</p>
-                <div class="visualizer-container" style="text-align:center;">
-                    <canvas id="structuralCanvas" width="600" height="300" style="background:#020617; border-radius:10px; border:1px solid var(--border-color); max-width:100%;"></canvas>
-                </div>
-                <div style="margin-top:12px; display:flex; gap:10px;">
-                    <button class="btn btn-primary" onclick="drawStructuralFrame()">🔄 Redraw Structural Frame</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 4: HYDRAULICS -->
+        <!-- 3. PIPELINES & HYDRAULICS -->
         <div id="tab-hydraulics" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Pipeline & Hydraulics Analysis</h3>
@@ -152,144 +151,235 @@
                     <div class="form-group"><label>Pipe Diameter D (mm):</label><input type="number" id="pipeD" value="250" oninput="calcHydraulics()"></div>
                     <div class="form-group"><label>Flow Rate Q (L/s):</label><input type="number" id="flowQ" value="45" oninput="calcHydraulics()"></div>
                     <div class="form-group"><label>Pipeline Length L (m):</label><input type="number" id="pipeL" value="1200" oninput="calcHydraulics()"></div>
+                    <div class="form-group"><label>Roughness Absolute e (mm):</label><input type="number" id="pipeRough" value="0.045" oninput="calcHydraulics()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Hydraulic Gradient Line (HGL/EGL) & Section Flow</h4>
+                    <canvas id="hydraulicsCanvas" width="500" height="200" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="hydraulicsResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 5: S-CURVE -->
+        <!-- 4. S-CURVE & CASH FLOW -->
         <div id="tab-scurve" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Project Cash Flow & S-Curve Graph</h3>
+                <h3>Project Cash Flow & Cumulative S-Curve Engine</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Project Duration (Months):</label><input type="number" id="projMonths" value="6" oninput="generateSCurve()"></div>
                     <div class="form-group"><label>Total Budget ($):</label><input type="number" id="projBudget" value="250000" oninput="generateSCurve()"></div>
+                    <div class="form-group"><label>Advance Payment (%):</label><input type="number" id="advancePay" value="10" oninput="generateSCurve()"></div>
                 </div>
-                <div style="margin-top:20px; height:250px;">
-                    <canvas id="scurveChart"></canvas>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Planned vs Actual Cash Flow Curve</h4>
+                    <canvas id="scurveCanvas" width="550" height="220" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
                 </div>
+
                 <div class="results-box"><div id="scurveResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 6: DEFLECTION & USCS -->
+        <!-- 5. DEFLECTION & USCS -->
         <div id="tab-deflection" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Deflection, Beam Splices & USCS Classification</h3>
+                <h3>Structural Deflection, Beam Splices & USCS Soil</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Span Length L (m):</label><input type="number" id="spanL" value="6" oninput="checkDeflection()"></div>
-                    <div class="form-group"><label>Max Deflection Delta (mm):</label><input type="number" id="defDelta" value="12" oninput="checkDeflection()"></div>
+                    <div class="form-group"><label>Applied Load (kN/m):</label><input type="number" id="spanLoad" value="15" oninput="checkDeflection()"></div>
+                    <div class="form-group"><label>Actual Deflection Delta (mm):</label><input type="number" id="defDelta" value="12" oninput="checkDeflection()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Bending Deflection Curve & Moment Diagram</h4>
+                    <canvas id="deflectionCanvas" width="500" height="180" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="deflectionResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 7: MATERIALS -->
+        <!-- 6. SITE MATERIALS & FORMWORK -->
         <div id="tab-materials" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Site Materials & Formwork</h3>
+                <h3>Site Materials & Formwork Grid</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Slab Area (m²):</label><input type="number" id="slabArea" value="150" oninput="calcFormwork()"></div>
+                    <div class="form-group"><label>Slab Surface Area (m²):</label><input type="number" id="slabArea" value="150" oninput="calcFormwork()"></div>
+                    <div class="form-group"><label>Slab Thickness (m):</label><input type="number" id="slabThick" value="0.2" oninput="calcFormwork()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Formwork Plywood & Props Spacing Grid</h4>
+                    <canvas id="materialsCanvas" width="500" height="180" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="materialsResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 8: REBAR OPTIMIZER -->
+        <!-- 7. REBAR OPTIMIZER -->
         <div id="tab-rebar" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Rebar Optimizer</h3>
+                <h3>Rebar Optimizer & Cut Wastage Engine</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Bar Dia (mm):</label><input type="number" id="rebarDia" value="16" oninput="optimizeRebar()"></div>
-                    <div class="form-group"><label>Cut Length (m):</label><input type="number" id="cutLen" value="3.8" oninput="optimizeRebar()"></div>
-                    <div class="form-group"><label>Total Pieces:</label><input type="number" id="barPieces" value="120" oninput="optimizeRebar()"></div>
+                    <div class="form-group"><label>Required Cut Length (m):</label><input type="number" id="cutLen" value="3.8" oninput="optimizeRebar()"></div>
+                    <div class="form-group"><label>Total Cut Pieces:</label><input type="number" id="barPieces" value="120" oninput="optimizeRebar()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: 12m Commercial Stock Bar Cutting Breakdown</h4>
+                    <canvas id="rebarCanvas" width="500" height="120" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="rebarResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 9: MACHINERY -->
+        <!-- 8. MACHINERY & FLEET -->
         <div id="tab-machinery" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Machinery & Fleet Logistics</h3>
+                <h3>Machinery & Fleet Logistics Workstation</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Total Volume to Excavate (m³):</label><input type="number" id="excVol" value="5000" oninput="calcMachinery()"></div>
-                    <div class="form-group"><label>Dispatch Rate Needed (m³/hr):</label><input type="number" id="excRate" value="80" oninput="calcMachinery()"></div>
+                    <div class="form-group"><label>Total Excavation Vol (m³):</label><input type="number" id="excVol" value="5000" oninput="calcMachinery()"></div>
+                    <div class="form-group"><label>Excavator Rate (m³/hr):</label><input type="number" id="excRate" value="80" oninput="calcMachinery()"></div>
+                    <div class="form-group"><label>Truck Capacity (m³):</label><input type="number" id="truckCap" value="16" oninput="calcMachinery()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Excavation Fleet Cycle & Delivery Rate</h4>
+                    <canvas id="machineryCanvas" width="500" height="180" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="machineryResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 10: CONCRETE -->
+        <!-- 9. CONCRETE & MIX DESIGN -->
         <div id="tab-concrete" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Concrete Mix Design</h3>
+                <h3>Concrete Mix Design Workstation</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Target Concrete Vol (m³):</label><input type="number" id="concVol" value="50" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Target Strength f'c (MPa):</label><input type="number" id="concFc" value="30" oninput="calcConcrete()"></div>
+                    <div class="form-group"><label>Water / Cement Ratio (w/c):</label><input type="number" id="wcRatio" value="0.45" step="0.01" oninput="calcConcrete()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Volumetric Mix Volumetric Distribution</h4>
+                    <canvas id="concreteCanvas" width="500" height="180" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="concreteResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 11: ROADS -->
+        <!-- 10. ROADS & EARTHWORKS -->
         <div id="tab-roads" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Roads & Subbase Calculation</h3>
+                <h3>Roads Cross-Section & Earthworks</h3>
                 <div class="form-grid">
                     <div class="form-group"><label>Road Length (m):</label><input type="number" id="roadL" value="500" oninput="calcRoads()"></div>
-                    <div class="form-group"><label>Road Width (m):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Carriageway Width (m):</label><input type="number" id="roadW" value="8" oninput="calcRoads()"></div>
+                    <div class="form-group"><label>Subbase Thickness (cm):</label><input type="number" id="subbaseT" value="25" oninput="calcRoads()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Flexible Pavement Structural Layers</h4>
+                    <canvas id="roadCanvas" width="500" height="200" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="roadsResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 12: SURVEYING -->
+        <!-- 11. SURVEYING & LEVELING -->
         <div id="tab-surveying" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>Surveying & Leveling</h3>
+                <h3>Surveying & Optical Leveling Workstation</h3>
                 <div class="form-grid">
-                    <div class="form-group"><label>Benchmark Height BM (m):</label><input type="number" id="bmHeight" value="100.00" oninput="calcSurvey()"></div>
+                    <div class="form-group"><label>Benchmark Elevation BM (m):</label><input type="number" id="bmHeight" value="100.00" oninput="calcSurvey()"></div>
                     <div class="form-group"><label>Back Sight BS (m):</label><input type="number" id="bsVal" value="1.45" oninput="calcSurvey()"></div>
                     <div class="form-group"><label>Fore Sight FS (m):</label><input type="number" id="fsVal" value="2.10" oninput="calcSurvey()"></div>
                 </div>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: Level Instrument Sight Lines & Ground Profile</h4>
+                    <canvas id="surveyCanvas" width="500" height="200" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box"><div id="surveyResults"></div></div>
             </div>
         </div>
 
-        <!-- TAB 13: TECHNICAL OFFER & PDF EXPORT -->
-        <div id="tab-technical" class="tab-module" style="display:none;">
-            <div class="calculator-card">
-                <h3>Technical Offer Draft & Report Generation</h3>
-                <div style="display:flex; gap:10px; margin-bottom:12px;">
-                    <button class="btn btn-primary" onclick="generateOffer()">Generate Formal Proposal</button>
-                    <button class="btn btn-primary" style="background:#10B981;" onclick="exportPDFReport()">📥 Export Official PDF Document</button>
-                </div>
-                <div class="results-box"><div id="technicalOfferOutput"></div></div>
-            </div>
-        </div>
-
-        <!-- TAB 14: HSE -->
+        <!-- 12. HSE RISK ASSESSMENT -->
         <div id="tab-hse" class="tab-module" style="display:none;">
             <div class="calculator-card">
-                <h3>HSE Risk Matrix</h3>
+                <h3>HSE Risk Matrix & Site Safety Engine</h3>
+
+                <div style="margin:20px 0; text-align:center;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:8px;">MODULE VISUALIZER: 5x5 Hazard Risk Heatmap Matrix</h4>
+                    <canvas id="hseCanvas" width="400" height="220" style="background:#020617; border-radius:8px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+
                 <div class="results-box">
                     <table>
-                        <thead><tr><th>Activity</th><th>Hazard</th><th>Risk Level</th><th>Mitigation Measure</th></tr></thead>
+                        <thead><tr><th>Site Activity</th><th>Identified Hazard</th><th>Risk Level</th><th>Mitigation Measure</th></tr></thead>
                         <tbody>
-                            <tr><td>Excavation</td><td>Cave-in / Collapse</td><td><span class="badge-danger">HIGH</span></td><td>Sloping 1:1, Benching, Shoring</td></tr>
-                            <tr><td>Lifting Ops</td><td>Crane Overturn</td><td><span class="badge-danger">HIGH</span></td><td>Outrigger Pads, Load Chart Check</td></tr>
+                            <tr><td>Excavation Work</td><td>Soil Collapse / Cave-in</td><td><span class="badge-danger">HIGH</span></td><td>Bench 1:1, Shoring & Daily Inspection</td></tr>
+                            <tr><td>Heavy Lifting Ops</td><td>Crane Overturn / Rigging Failure</td><td><span class="badge-danger">HIGH</span></td><td>Outrigger Soil Pads & Rigging Permit</td></tr>
+                            <tr><td>Steel Erection</td><td>Fall From Height</td><td><span class="badge-danger">CRITICAL</span></td><td>100% Lifeline Tie-off & Harness</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
+        <!-- 13. TECHNICAL OFFER & EXPORT HUB -->
+        <div id="tab-technical" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Technical Offer Draft & Export Package Hub</h3>
+                
+                <!-- SECTION 1: EXECUTIVE PDF REPORT -->
+                <div style="padding:16px; background:#0f172a; border-radius:8px; border:1px solid var(--border-color); margin-bottom:20px;">
+                    <h4 style="color:var(--accent-sky); margin-bottom:6px;">1. EXECUTIVE PROJECT REPORT (PDF)</h4>
+                    <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Exports complete commercial BOQs, structural analyses, and FX valuation.</p>
+                    <button class="btn btn-primary" onclick="generateOffer()">Generate Proposal Summary</button>
+                    <button class="btn btn-primary" style="background:#10B981; margin-left:8px;" onclick="exportPDFReport()">📥 Download Official PDF Document</button>
+                </div>
+
+                <!-- SECTION 2: CAD SCHEMATICS & DRAWINGS PACKAGE EXPORT -->
+                <div style="padding:16px; background:#0f172a; border-radius:8px; border:1px solid var(--border-color);">
+                    <h4 style="color:var(--accent-sky); margin-bottom:6px;">2. ENGINEERING CAD SCHEMATICS & DRAWINGS PACKAGE</h4>
+                    <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Export module visualizers and schematics as a consolidated engineering drawing bundle.</p>
+                    <button class="btn btn-primary" style="background:#8B5CF6;" onclick="exportCADPackage()">🎨 Download Consolidated CAD Drawing Schematics</button>
+                </div>
+
+                <div class="results-box" style="margin-top:20px;"><div id="technicalOfferOutput"></div></div>
+            </div>
+        </div>
+
+        <!-- 14. UNIVERSAL FREEHAND CANVAS -->
+        <div id="tab-canvas" class="tab-module" style="display:none;">
+            <div class="calculator-card">
+                <h3>Universal Canvas & Freehand CAD Draft Workstation</h3>
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Standby freehand drawing visualizer for external sketches and structural drafts.</p>
+                <div class="visualizer-container" style="text-align:center;">
+                    <canvas id="universalCanvas" width="650" height="320" style="background:#020617; border-radius:10px; border:1px solid var(--border-color); max-width:100%;"></canvas>
+                </div>
+                <div style="margin-top:12px; display:flex; gap:10px; justify-center;">
+                    <button class="btn btn-primary" onclick="drawUniversalFrame()">🔄 Redraw Auxiliary Wireframe</button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- Quick Unit Converter Floating Button -->
+    <!-- Floating Unit Converter -->
     <button class="floating-converter-btn" onclick="document.getElementById('unitModal').style.display = document.getElementById('unitModal').style.display === 'none' ? 'block' : 'none'">⚡ Unit Converter</button>
 
-    <!-- Unit Converter Modal -->
     <div id="unitModal" class="modal-pop" style="display:none;">
         <h4 style="margin-bottom:10px;">Quick Unit Converter</h4>
         <div class="form-group" style="margin-bottom:8px;">
