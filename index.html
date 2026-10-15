@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Civil & Oilfield Engineering Suite - Ultimate Workstation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>DF Civil & Oilfield Engineering Workstation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -12,10 +12,11 @@
     <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div>
+            <!-- DF Monogram Logo Header -->
             <div class="brand">
-                <div class="brand-logo">E</div>
+                <div class="brand-logo">DF</div>
                 <div>
-                    <div class="brand-title">ENGINEERING SUITE</div>
+                    <div class="brand-title">DF ENGINEERING</div>
                     <div class="brand-sub">Civil & Oilfield Copilot</div>
                 </div>
             </div>
@@ -64,11 +65,28 @@
     <div class="main-content">
         <div class="header">
             <div>
-                <h1 id="currentProjectTitle">Civil & Oilfield Engineering Suite</h1>
-                <p>Integrated Structural, BOQ, Method Statement, Geotech & Fleet Engine</p>
+                <h1 id="currentProjectTitle">DF Engineering Suite</h1>
+                <p>Civil & Oilfield Workstation - Professional Copilot</p>
             </div>
-            <div>
-                <button class="btn btn-primary" onclick="exportToExcel()" style="margin-left:auto;">📊 Export Full BOQ to Excel (.CSV)</button>
+            <div style="display:flex; gap:8px;">
+                <button class="btn btn-theme" onclick="document.body.classList.toggle('light-theme')">☀️/🌙 Theme</button>
+                <button class="btn btn-primary" onclick="exportToExcel()">📊 Export Full BOQ to Excel (.CSV)</button>
+            </div>
+        </div>
+
+        <!-- Top Summary Dashboard Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h4>Active Project Engine</h4>
+                <div class="metric-value" style="color:#10B981;">ONLINE (DF-V3)</div>
+            </div>
+            <div class="metric-card">
+                <h4>Rebar Wastage Target</h4>
+                <div class="metric-value">&lt; 5.6% Optimal</div>
+            </div>
+            <div class="metric-card">
+                <h4>Market Exchange Rate</h4>
+                <div class="metric-value" style="color:#F59E0B;">153,000 IQD</div>
             </div>
         </div>
 
@@ -184,12 +202,10 @@
             </div>
         </div>
 
-        <!-- NEW: Final Tools Canvas Module -->
+        <!-- Canvas Module -->
         <div id="tab-final-tools" class="tab-module" style="display:none;">
             <div class="calculator-card">
                 <h3>Live Canvas Drawing & Rebar Lap Splice Engine</h3>
-                
-                <!-- Live Canvas Visualizer -->
                 <div>
                     <h4>1. Live Scale Interactive Footing Drawing</h4>
                     <div style="text-align:center; margin-top:10px;">
@@ -199,7 +215,6 @@
                     </div>
                 </div>
 
-                <!-- Rebar Lap Splice Engine -->
                 <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
                     <h4>2. Rebar Development Length & Tension Lap Splice (ACI 318)</h4>
                     <div class="form-grid">
@@ -213,7 +228,6 @@
                     </div>
                 </div>
 
-                <!-- Fuel Consumption Estimator -->
                 <div style="margin-top:24px; padding-top:16px; border-top:1px solid #334155;">
                     <h4>3. Site Equipment Fuel & Power Cost Estimator</h4>
                     <div class="form-grid">
@@ -226,7 +240,6 @@
                         <p style="margin-top:4px;">Estimated Daily Fuel Cost: <b id="fuelCostOut">$140</b></p>
                     </div>
                 </div>
-
             </div>
         </div>
 
