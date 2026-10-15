@@ -1,13 +1,13 @@
 /* DF Civil & Oilfield Engineering Suite - Ultimate Clean UI */
 :root {
-    --bg-main: #0F172A;
+    --bg-main: #0B1120;
     --bg-card: #1E293B;
     --bg-sidebar: #020617;
     --border-color: #334155;
     --text-primary: #F8FAFC;
     --text-secondary: #94A3B8;
     --accent-blue: #2563EB;
-    --accent-sky: #38BDF8;
+    --accent-sky: #0284C7;
     --accent-green: #10B981;
     --accent-amber: #F59E0B;
     --accent-red: #EF4444;
@@ -38,6 +38,87 @@ body {
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Splash Screen Setup */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0B1120;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: opacity 0.5s ease;
+}
+
+.brand-logo-hero {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    background: linear-gradient(145deg, #1D4ED8 0%, #0284C7 100%);
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 15px 35px rgba(2, 132, 199, 0.45), inset 0 2px 2px rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 24px;
+}
+
+.hero-helmet-svg {
+    position: absolute;
+    top: -22px;
+    right: -16px;
+    width: 68px;
+    height: 48px;
+    transform: rotate(20deg);
+}
+
+.logo-text {
+    font-weight: 900;
+    font-size: 46px;
+    color: #FFFFFF;
+    letter-spacing: -1px;
+}
+
+.splash-title {
+    color: #FFF;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+.splash-sub {
+    color: #38BDF8;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 32px;
+}
+
+.splash-btn {
+    background: linear-gradient(135deg, #2563EB, #0284C7);
+    color: #FFF;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.splash-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.7);
+}
+
 /* Sidebar Layout */
 .sidebar {
     width: 280px;
@@ -53,7 +134,7 @@ body {
     overflow-y: auto;
 }
 
-/* Brand & DF Monogram Logo */
+/* Sidebar Logo */
 .brand {
     display: flex;
     align-items: center;
@@ -66,18 +147,27 @@ body {
 .brand-logo {
     width: 44px;
     height: 44px;
-    background: linear-gradient(135deg, #2563EB, #06B6D4);
-    border-radius: 10px;
+    background: linear-gradient(135deg, #2563EB, #0284C7);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 900;
     font-size: 18px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: #FFFFFF;
     box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
+}
+
+.sidebar-helmet-svg {
+    position: absolute;
+    top: -9px;
+    right: -7px;
+    width: 26px;
+    height: 18px;
+    transform: rotate(20deg);
 }
 
 .brand-title {
@@ -306,7 +396,7 @@ th {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: linear-gradient(135deg, #2563EB, #06B6D4);
+    background: linear-gradient(135deg, #2563EB, #0284C7);
     color: #FFF;
     border: none;
     border-radius: 50px;
