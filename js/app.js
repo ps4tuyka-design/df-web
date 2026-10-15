@@ -89,7 +89,7 @@ function initTabs() {
     });
 }
 
-// 3. STEEL SHEDS & PURLINS (الطراحيات) CALCULATOR
+// 3. STEEL SHEDS & PURLINS CALCULATOR
 function calcShed() {
     const L = parseFloat(document.getElementById('shedL')?.value) || 30;
     const W = parseFloat(document.getElementById('shedW')?.value) || 15;
@@ -129,7 +129,7 @@ function calcShed() {
                 <td>${convertToIQD(costPanelsUSD)} IQD</td>
             </tr>
             <tr>
-                <td>Purlins & Girts (الطراحيات)</td>
+                <td>Purlins & Structural Girts</td>
                 <td>${totalPurlins} pcs</td>
                 <td>Included</td>
                 <td>-</td>
